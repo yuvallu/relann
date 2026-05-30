@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "device": "cpu",
+    "runs": 5,
+    "seed_start": 42
+  },
+  "results": [
+    {
+      "dataset": "MUTAG",
+      "runs": [
+        {
+          "dataset": "MUTAG",
+          "seed": 42,
+          "num_nodes": 23644,
+          "num_relations": 46,
+          "num_classes": 2,
+          "dsl_loc": 31,
+          "torch_rgcn": {
+            "test_acc": 0.6911764740943909,
+            "time_s": 34.913507199999,
+            "params": 11355678
+          },
+          "pyg": {
+            "test_acc": 0.7352941036224365,
+            "time_s": 13.891162800002348,
+            "params": 11731194
+          },
+          "relnn": {
+            "test_acc": 0.5882352941176471,
+            "time_s": 1112.5852534999976,
+            "params": 389992
+          }
+        },
+        {
+          "dataset": "MUTAG",
+          "seed": 43,
+          "num_nodes": 23644,
+          "num_relations": 46,
+          "num_classes": 2,
+          "dsl_loc": 31,
+          "torch_rgcn": {
+            "test_acc": 0.75,
+            "time_s": 34.618951899999956,
+            "params": 11355678
+          },
+          "pyg": {
+            "test_acc": 0.720588207244873,
+            "time_s": 18.556461500000296,
+            "params": 11731194
+          },
+          "relnn": {
+            "test_acc": 0.75,
+            "time_s": 1238.2141211999988,
+            "params": 389992
+          }
+        },
+        {
+          "dataset": "MUTAG",
+          "seed": 44,
+          "num_nodes": 23644,
+          "num_relations": 46,
+          "num_classes": 2,
+          "dsl_loc": 31,
+          "torch_rgcn": {
+            "test_acc": 0.6911764740943909,
+            "time_s": 31.481745100001717,
+            "params": 11355678
+          },
+          "pyg": {
+            "test_acc": 0.6764705777168274,
+            "time_s": 14.954638499999419,
+            "params": 11731194
+          },
+          "relnn": {
+            "test_acc": 0.45588235294117646,
+            "time_s": 1102.879183699999,
+            "params": 389992
+          }
+        },
+        {
+          "dataset": "MUTAG",
+          "seed": 45,
+          "num_nodes": 23644,
+          "num_relations": 46,
+          "num_classes": 2,
+          "dsl_loc": 31,
+          "torch_rgcn": {
+            "test_acc": 0.6764705777168274,
+            "time_s": 31.652841799997987,
+            "params": 11355678
+          },
+          "pyg": {
+            "test_acc": 0.6764705777168274,
+            "time_s": 13.342865099999472,
+            "params": 11731194
+          },
+          "relnn": {
+            "test_acc": 0.5147058823529411,
+            "time_s": 1159.799887199999,
+            "params": 389992
+          }
+        },
+        {
+          "dataset": "MUTAG",
+          "seed": 46,
+          "num_nodes": 23644,
+          "num_relations": 46,
+          "num_classes": 2,
+          "dsl_loc": 31,
+          "torch_rgcn": {
+            "test_acc": 0.720588207244873,
+            "time_s": 31.10393599999952,
+            "params": 11355678
+          },
+          "pyg": {
+            "test_acc": 0.7352941036224365,
+            "time_s": 12.454812600000878,
+            "params": 11731194
+          },
+          "relnn": {
+            "test_acc": 0.45588235294117646,
+            "time_s": 1084.3473145000025,
+            "params": 389992
+          }
+        }
+      ]
+    }
+  ]
+}

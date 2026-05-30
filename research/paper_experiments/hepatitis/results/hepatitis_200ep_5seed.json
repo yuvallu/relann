@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "device": "cpu",
+    "runs": 5,
+    "epochs": 200,
+    "hidden": 64,
+    "lr": 0.02,
+    "weight_decay": 0.0
+  },
+  "summary": {
+    "val_roc_auc": "0.888522 \u00b1 0.004720",
+    "test_roc_auc": "0.876068 \u00b1 0.006508"
+  },
+  "runs": [
+    {
+      "seed": 100,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.02,
+      "weight_decay": 0.0,
+      "metrics": {
+        "val_roc_auc": 0.8873744619799139,
+        "test_roc_auc": 0.8653846153846153
+      },
+      "time_s": 0.13513460001558997,
+      "params": 1281
+    },
+    {
+      "seed": 101,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.02,
+      "weight_decay": 0.0,
+      "metrics": {
+        "val_roc_auc": 0.8902439024390245,
+        "test_roc_auc": 0.8746438746438746
+      },
+      "time_s": 0.07645180000690743,
+      "params": 1281
+    },
+    {
+      "seed": 102,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.02,
+      "weight_decay": 0.0,
+      "metrics": {
+        "val_roc_auc": 0.8909612625538019,
+        "test_roc_auc": 0.8796296296296297
+      },
+      "time_s": 0.07940499999676831,
+      "params": 1281
+    },
+    {
+      "seed": 103,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.02,
+      "weight_decay": 0.0,
+      "metrics": {
+        "val_roc_auc": 0.8809182209469154,
+        "test_roc_auc": 0.878917378917379
+      },
+      "time_s": 0.0931263999955263,
+      "params": 1281
+    },
+    {
+      "seed": 104,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.02,
+      "weight_decay": 0.0,
+      "metrics": {
+        "val_roc_auc": 0.8931133428981348,
+        "test_roc_auc": 0.8817663817663817
+      },
+      "time_s": 0.09494410001207143,
+      "params": 1281
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+name: tests
+
+# PR-triggered only (per project policy). Add `push` if you also want to run
+# on main pushes; `workflow_dispatch` stays as a manual escape hatch.
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install package + dependencies
+        run: uv sync
+
+      - name: Install PyG sparse stack (torch-scatter, torch-sparse, torch-cluster, torch-geometric)
+        # Not declared in pyproject.toml because PyPI sdists need torch installed
+        # at build time; uv's isolated resolver can't handle that. See
+        # `poe pyg-install` in pyproject.toml for the same step from the CLI.
+        run: uv run poe pyg-install
+
+      - name: Smoke (~5s)
+        run: uv run poe smoke
+
+      - name: Quick (~15s) — smoke + feature
+        run: uv run poe quick
+
+      - name: Repro suite (~15s) — pins every fix + every active bug
+        run: uv run pytest tests/repro -v
+
+      - name: DHN (~30s) — engine + ER ops
+        run: uv run pytest tests/dhn -v
+
+      # Scaffold tests must run in SEPARATE pytest invocations; combined runs
+      # wedge due to a matplotlib/torch state-leak (see tests/scaffold/README.md).
+      #
+      # Each file runs its checks at import under juplit's `if test():` and ends
+      # with a `def test_*_ran_to_completion` asserting the body executed, so
+      # pytest collects exactly 1 real test per file. A clean run is exit 0; a
+      # moved or skipped file is exit 5 ("no tests collected") and now correctly
+      # FAILS the step instead of passing silently.
+      - name: Scaffold test_902 (~15s)
+        run: uv run pytest tests/scaffold/test_902_gcn_relnn.py -v
+      - name: Scaffold test_912 (~40s)
+        run: uv run pytest tests/scaffold/test_912_scaffold_gcn_cora.py -v
+
+      # Fast HGT end-to-end smoke. Self-contained (uses Cora via Planetoid).
+      # GCN scaffold tests above don't exercise the multi-step Join path that
+      # HGT does — this script does. Added 2026-05 after a Windows+CPU run
+      # surfaced a regression in `Join._do_one_merge` that the GCN scaffold
+      # tests missed. If this step is green on Linux but red on Windows+CPU,
+      # the failure is platform-specific; if red here too, it's a real
+      # engine regression. See docs/_archive/hgt-status-2026-05-25.md.
+      - name: HGT template Cora e2e (~30s) — exercises multi-step Join path
+        run: uv run python tests/slow/run_hgt_template_cora.py

@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "device": "cpu",
+    "runs": 5,
+    "epochs": 200,
+    "uniform_hparams": false,
+    "extra_relbench_tables": false,
+    "tuned_per_task": {
+      "driver-top3": {
+        "hidden": 64,
+        "lr": 0.005,
+        "weight_decay": 0.0005
+      }
+    }
+  },
+  "runs": [
+    {
+      "task_name": "driver-top3",
+      "seed": 100,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.3224731901064682,
+        "accuracy": 0.7823691460055097,
+        "f1": 0.26851851851851855,
+        "roc_auc": 0.5394283026755853
+      },
+      "time_s": 0.11462259999825619,
+      "params": 17537
+    },
+    {
+      "task_name": "driver-top3",
+      "seed": 101,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.24007835161710345,
+        "accuracy": 0.7823691460055097,
+        "f1": 0.26851851851851855,
+        "roc_auc": 0.5295908235785953
+      },
+      "time_s": 0.10783659998560324,
+      "params": 17537
+    },
+    {
+      "task_name": "driver-top3",
+      "seed": 102,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.3224731901064682,
+        "accuracy": 0.7823691460055097,
+        "f1": 0.26851851851851855,
+        "roc_auc": 0.5394283026755854
+      },
+      "time_s": 0.09567589999642223,
+      "params": 17537
+    },
+    {
+      "task_name": "driver-top3",
+      "seed": 103,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.3224731901064682,
+        "accuracy": 0.7823691460055097,
+        "f1": 0.26851851851851855,
+        "roc_auc": 0.5394283026755854
+      },
+      "time_s": 0.09959399999934249,
+      "params": 17537
+    },
+    {
+      "task_name": "driver-top3",
+      "seed": 104,
+      "hidden": 64,
+      "epochs": 200,
+      "lr": 0.005,
+      "weight_decay": 0.0005,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.24007835161710345,
+        "accuracy": 0.7823691460055097,
+        "f1": 0.26851851851851855,
+        "roc_auc": 0.5295908235785953
+      },
+      "time_s": 0.10429330001352355,
+      "params": 17537
+    }
+  ]
+}

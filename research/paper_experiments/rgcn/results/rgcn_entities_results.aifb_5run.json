@@ -1,0 +1,134 @@
+{
+  "metadata": {
+    "device": "cpu",
+    "runs": 5,
+    "seed_start": 42
+  },
+  "results": [
+    {
+      "dataset": "AIFB",
+      "runs": [
+        {
+          "dataset": "AIFB",
+          "seed": 42,
+          "num_nodes": 8285,
+          "num_relations": 90,
+          "num_classes": 4,
+          "torch_rgcn": {
+            "test_acc": 0.9444444179534912,
+            "time_s": 24.21463230001973,
+            "params": 24004964
+          },
+          "pyg": {
+            "test_acc": 0.9166666865348816,
+            "time_s": 6.419889600016177,
+            "params": 4116764
+          },
+          "relnn_full": {
+            "test_acc": 0.9166666666666666,
+            "time_s": 134.83051619998878,
+            "params": 24004964,
+            "dsl_loc": 20,
+            "match": "torch-rgcn"
+          }
+        },
+        {
+          "dataset": "AIFB",
+          "seed": 43,
+          "num_nodes": 8285,
+          "num_relations": 90,
+          "num_classes": 4,
+          "torch_rgcn": {
+            "test_acc": 0.9722222089767456,
+            "time_s": 35.99174860003404,
+            "params": 24004964
+          },
+          "pyg": {
+            "test_acc": 0.9166666865348816,
+            "time_s": 13.712071900023147,
+            "params": 4116764
+          },
+          "relnn_full": {
+            "test_acc": 0.9166666666666666,
+            "time_s": 201.56979719997616,
+            "params": 24004964,
+            "dsl_loc": 20,
+            "match": "torch-rgcn"
+          }
+        },
+        {
+          "dataset": "AIFB",
+          "seed": 44,
+          "num_nodes": 8285,
+          "num_relations": 90,
+          "num_classes": 4,
+          "torch_rgcn": {
+            "test_acc": 0.8888888955116272,
+            "time_s": 23.312858499994036,
+            "params": 24004964
+          },
+          "pyg": {
+            "test_acc": 0.9166666865348816,
+            "time_s": 7.057651599985547,
+            "params": 4116764
+          },
+          "relnn_full": {
+            "test_acc": 0.9722222222222222,
+            "time_s": 131.84099230001448,
+            "params": 24004964,
+            "dsl_loc": 20,
+            "match": "torch-rgcn"
+          }
+        },
+        {
+          "dataset": "AIFB",
+          "seed": 45,
+          "num_nodes": 8285,
+          "num_relations": 90,
+          "num_classes": 4,
+          "torch_rgcn": {
+            "test_acc": 0.8888888955116272,
+            "time_s": 21.73035099997651,
+            "params": 24004964
+          },
+          "pyg": {
+            "test_acc": 0.9444444179534912,
+            "time_s": 6.825623899989296,
+            "params": 4116764
+          },
+          "relnn_full": {
+            "test_acc": 0.9166666666666666,
+            "time_s": 195.15403470001183,
+            "params": 24004964,
+            "dsl_loc": 20,
+            "match": "torch-rgcn"
+          }
+        },
+        {
+          "dataset": "AIFB",
+          "seed": 46,
+          "num_nodes": 8285,
+          "num_relations": 90,
+          "num_classes": 4,
+          "torch_rgcn": {
+            "test_acc": 0.9722222089767456,
+            "time_s": 22.44931070000166,
+            "params": 24004964
+          },
+          "pyg": {
+            "test_acc": 0.9166666865348816,
+            "time_s": 7.503906600002665,
+            "params": 4116764
+          },
+          "relnn_full": {
+            "test_acc": 0.9166666666666666,
+            "time_s": 229.24301839998225,
+            "params": 24004964,
+            "dsl_loc": 20,
+            "match": "torch-rgcn"
+          }
+        }
+      ]
+    }
+  ]
+}

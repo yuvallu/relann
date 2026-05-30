@@ -1,0 +1,208 @@
+// =======================
+//   RELNN Lark Grammar
+// =======================
+
+// --------- Imports & Ignored ---------
+%import common.CNAME
+%import common.ESCAPED_STRING
+%import common.NUMBER
+%import common.SIGNED_NUMBER
+%import common.WS
+%ignore WS
+
+// TODO - consider changing pytorch's Module terminology to Layer terminology.
+
+// Allow @lark comments in the grammar
+COMMENT: /#[^\n]*/
+%ignore COMMENT
+
+// --------- Entry Point ---------
+program: statement*
+
+// --------- Top-Level Statements --------- // I removed all the _stmt at the end of each rule
+?statement: function_def
+          | rule
+          | transform_def
+          | fit
+          | predict
+
+// High order Templates
+template_params: "<" _delimited_list{template_param, ","} ">"
+template_param: var
+              | primitive
+template_args: "<" _delimited_list{arith_term, ","} ">"
+
+// --------- Function Definitions ---------
+function_def: "def" name template_params? "(" er_params ")" ["->" return_type] ":" function_body "enddef"
+function_body: func_body_statement+   // TODO - semantic error if not last statement = rule.
+?func_body_statement: rule
+                   | transform_def
+er_params: _delimited_list{er_param, ","}
+er_param: name [":" er_schema]
+?return_type: er_schema
+er_schema: "(" content_attr_types [";" embedding_dims] ")"
+
+// --------- Rule ---------
+rule: lhs ":-" rhs  "."        -> regular_rule
+    | lhs ":-" bounded_rhs "." -> bounded_rule
+?lhs: derived_er_def
+rhs: er (rel_op er)* filter_expressions
+
+// --------- Bounded Rule ---------
+bounded_rhs: REL_OP_NAME "(" "Set" "(" er "|" bounding ")" ")"
+bounding: er ("," er)* bounding_condition
+        | comparison_expression ("," comparison_expression)+   -> condition_only_bounding
+bounding_condition: ("," comparison_expression)*  // Note: this could be any mathematical ops.
+comparison_expression: arith_term COMP_OP arith_term
+
+derived_er_def: name template_params? "(" derived_content_attrs embedding_expression ")"
+er: name template_args? "(" content_attrs embedding_var ")"                   -> er_instance
+  | name template_args? "(" arguments ")" "(" content_attrs embedding_var ")" -> function_call  // returns er
+
+arguments: _delimited_list{er_ref, ","}
+er_ref: name template_args?
+derived_content_attrs: _delimited_list{derived_content_attr, ","}
+?derived_content_attr: (var | primitive | content_decode)
+content_attrs: _delimited_list{content_attr, ","}  // Can be either a var or a primitive (e.g., allows things like "train" in `Split(a_id, "train")`)
+content_attr: var | primitive
+// embedding_var can be a variable name (e.g., z1) or a constant (e.g., 0) for constant embeddings.
+embedding_var: [";" [var | primitive]]
+
+// --------- Transform Definition ---------
+// RHS is a full tensor_term (same as embedding) so you can write composite
+// module chains, e.g.  Mu<k, i> = ... Mu_L1<k, i>(inp) .  and use inp as the
+// formal input (engine substitutes Mu<...>(z) by replacing Var("inp") in the body).
+// Single-paren ``Linear(1, 20)`` in a transform is disambiguated in the parser as a ctor
+// (hyper in/out) when both arguments are numeric literals. Two-paren ``Linear(1,20)(inp)`` is module_ctor_call.
+transform_def: name template_params? "=" tensor_term "."
+
+// --------- Embedding Expression ---------
+// Three explicit alternatives (no [] optional wrapping) — the parser's
+// embedding_expression_default_agg handler has a safety net that extracts
+// aggregation if Earley picks the wrong parse for sum(z*w) etc.
+embedding_expression: ";" aggregation_fn "(" tensor_sequential ")"  -> embedding_expression_with_agg
+                    | ";" tensor_sequential                          -> embedding_expression_default_agg
+                    |                                                -> embedding_expression_empty
+tensor_sequential: _delimited_list{tensor_term, ","}
+// tensor_term with standard arithmetic precedence:
+//   == (lowest) < +,- < *,/,@ < ** (highest, right-assoc) < atoms
+?tensor_term: tensor_eq
+
+?tensor_eq: tensor_sum
+          | tensor_eq "==" tensor_sum -> tensor_eq_op
+
+?tensor_sum: tensor_product
+           | tensor_sum "+" tensor_product -> tensor_add
+           | tensor_sum "-" tensor_product -> tensor_sub
+
+?tensor_product: tensor_power
+               | tensor_product "*" tensor_power -> tensor_mul
+               | tensor_product "/" tensor_power -> tensor_div
+               | tensor_product "@" tensor_power -> tensor_matmul
+
+?tensor_power: tensor_atom
+             | tensor_atom "**" tensor_power -> tensor_pow
+
+tensor_atom: name template_args                     -> var_templated
+           | var
+           | "(" tensor_term ")"
+           | content_encode
+           | number
+           | module_call
+           | splat
+
+// Ctor+apply (two paren groups) first so `Linear(in,out)(x)` is not parsed as
+// `module_instance_call` `Linear` `(in, out)` with a stray second `(x)`.
+module_call: module_class "(" hyper_param_list ")" "(" module_arguments ")" -> module_ctor_call
+           | module_instance "(" module_arguments ")"                       -> module_instance_call
+
+// Unapplied ctor ``Linear(16,32)`` uses ``module_class "(" hyper… ")"``; forward
+// calls with tensor arguments use ``module_call`` (two-paren ctors or module instances).
+
+module_arguments: _delimited_list{tensor_term, ","}
+module_instance: name template_args?  // name or templated name (e.g. Lin<64>)
+module_class: name  // check semanticly that is known class that inherets from nn.Module
+splat: "*" tensor_atom
+
+// --------- Embedding & Content Types ---------
+embedding_dims: _delimited_list{embedding_dim, ","}
+?embedding_dim: signed_int
+              | var
+content_attr_types: _delimited_list{primitive_type, ","}
+
+// --------- Filter ---------
+filter_expressions: ("," comparison_expression)*
+
+// --------- Fit & Predict ---------
+fit: "?fit" "<" fit_params ">" rule
+predict: "?pred" rule
+
+fit_params: _delimited_list{fit_param, ","}
+fit_param: name "=" arith_term
+
+// --------- Operators & Symbols ---------
+COMP_OP: "==" | "!=" | ">=" | "<=" | ">" | "<"
+comp_op: COMP_OP
+REL_OP: "," | "|"
+rel_op: REL_OP
+REL_OP_NAME: "Join" | "Union"  // consider using only lower case
+// TORCH_ARITH_OP removed — operator precedence now handled by tensor_term grammar levels
+
+// --------- Arithmetic Terms ---------
+hyper_param_list: _delimited_list{arith_term, ","}
+bool: "True"  -> true
+    | "False" -> false
+
+// --------- Basic Values & Types ---------
+primitive: bool | number | string
+var: name
+number: SIGNED_NUMBER
+int: NUMBER
+signed_int: SIGNED_NUMBER
+name: CNAME
+string: SINGLE_STRING | ESCAPED_STRING
+SINGLE_STRING: /'[^'\\]*'/
+// aggregation functions list of supported aggregation functions for use in the DSL (torch_scatter operations).
+AGGREGATION_FN: "min" | "max" | "add" | "sum" | "mean" | "avg" | "count"
+aggregation_fn: AGGREGATION_FN
+// primitive_type should be auto-generated from the DB framework (e.g. pandas) types
+PRIMITIVE_TYPE: "int" | "float" | "bool" | "str" | "Int8" | "Int16" | "Int32" | "Int64"| "UInt8" | "UInt16" | "UInt32" | "UInt64"| "Float32" | "Float64"| "boolean" | "string"| "datetime64[ns]" | "timedelta64[ns]"| "category" | "object"
+primitive_type: PRIMITIVE_TYPE
+// --------- Encode (RHS) / Decode (LHS) ---------
+// RHS: content -> embedding; one or more items concatenated.
+content_encode: "[" encode_item ("," encode_item)* "]"
+encode_item: var
+           | name "(" var ")"
+           | name "(" hyper_param_list ")" "(" var ")"
+
+// LHS: embedding -> content (single item)
+content_decode: "[" var "]"
+              | "[" name "(" var ")" "]"
+              | "[" name "(" hyper_param_list ")" "(" var ")" "]"
+
+// --------- End of Grammar ---------
+
+// --------- Templates ---------
+_delimited_list{x, sep}: [x (sep x)*]
+
+// --------- Arithmetic Expressions Grammar ---------
+ARITH_OP: "+" | "-" | "*" | "/" | "**"  // not in use
+arith_term: sum
+
+?sum: product
+    | sum "+" product   -> add
+    | sum "-" product   -> sub
+
+?product: power
+    | product "*" power -> mul
+    | product "/" power -> div
+
+?power: atom
+    | atom "**" power   -> pow    // right-assoc via right recursion
+
+?atom: number
+     | string
+     | bool
+     | var
+     | "-" atom          -> neg
+     | "(" arith_term ")"
