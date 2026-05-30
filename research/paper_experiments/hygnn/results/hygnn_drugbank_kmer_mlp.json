@@ -1,0 +1,44 @@
+{
+  "schema": "hygnn_compare_v1",
+  "generated_utc": "2026-05-02",
+  "command": "python nbs/paper_experiments/hygnn/run_compare_hygnn.py --source DrugBank --substructure kmer --decoder mlp",
+  "settings": {
+    "source": "DrugBank",
+    "substructure": "kmer",
+    "k": 9,
+    "decoder": "mlp",
+    "epochs": 500,
+    "lr": 0.005,
+    "seed": 42,
+    "weight_sync": "pyg_to_relnn_before_training"
+  },
+  "loc_counts": {
+    "pytorch_reference_non_comment": 150,
+    "pytorch_reference_file_slice_lines_48_218": 171,
+    "relnn_mlp_dsl_lines": 41,
+    "loc_method": "reference: non-empty, non-comment lines in run_hygnn_pytorch_ref.py HyGNNLayer+HyGNN+compute_loss; relnn: DSL strings RELNN_DEFINE_CORE+PAIRSCORE_MLP+FIT_MLP+TESTSCORE_MLP+PRED+MATERIALIZE in run_compare_hygnn.py"
+  },
+  "pytorch_reference": {
+    "test_accuracy": 0.9198,
+    "f1": 0.9227,
+    "roc_auc": 0.9767,
+    "pr_auc": 0.9755,
+    "params_total": 317569,
+    "params_encoder": 284544,
+    "train_wall_time_s": 636.3
+  },
+  "relnn": {
+    "test_accuracy": 0.9227,
+    "f1": 0.9221,
+    "roc_auc": 0.9771,
+    "pr_auc": 0.9757,
+    "params_total": 317569,
+    "params_encoder": 284544,
+    "train_wall_time_s": 1185.4
+  },
+  "notes": [
+    "On Windows, set PYTHONIOENCODING=utf-8 (or PYTHONUTF8=1) if printing the dataset summary raises UnicodeEncodeError.",
+    "Training time is wall-clock for the fit loop only (compare script); excludes initial data download.",
+    "e-graph optimizer fell back to legacy optimizer (printed warning at start). Same code path as TWOSIDES; DrugBank is smaller (645 drugs vs 1706) but has a larger encoder weight matrix because k-mer feature dim is larger for this dataset."
+  ]
+}

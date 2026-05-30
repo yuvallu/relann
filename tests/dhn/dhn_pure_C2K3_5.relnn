@@ -1,0 +1,119 @@
+#lang:relnn
+Mu_Cyc2_0_1_L1 = Linear(1, 20) .
+Mu_Cyc2_0_1_L2 = Linear(20, 20) .
+Mu_Cyc2_0_1_L3 = Linear(20, 10) .
+Mu_Cyc2_1_1_L1 = Linear(1, 20) .
+Mu_Cyc2_1_1_L2 = Linear(20, 20) .
+Mu_Cyc2_1_1_L3 = Linear(20, 10) .
+Mu_Kli3_0_1_L1 = Linear(1, 20) .
+Mu_Kli3_0_1_L2 = Linear(20, 20) .
+Mu_Kli3_0_1_L3 = Linear(20, 10) .
+Mu_Kli3_1_1_L1 = Linear(1, 20) .
+Mu_Kli3_1_1_L2 = Linear(20, 20) .
+Mu_Kli3_1_1_L3 = Linear(20, 10) .
+Mu_Kli3_2_1_L1 = Linear(1, 20) .
+Mu_Kli3_2_1_L2 = Linear(20, 20) .
+Mu_Kli3_2_1_L3 = Linear(20, 10) .
+Mu_Kli4_0_1_L1 = Linear(1, 20) .
+Mu_Kli4_0_1_L2 = Linear(20, 20) .
+Mu_Kli4_0_1_L3 = Linear(20, 10) .
+Mu_Kli4_1_1_L1 = Linear(1, 20) .
+Mu_Kli4_1_1_L2 = Linear(20, 20) .
+Mu_Kli4_1_1_L3 = Linear(20, 10) .
+Mu_Kli4_2_1_L1 = Linear(1, 20) .
+Mu_Kli4_2_1_L2 = Linear(20, 20) .
+Mu_Kli4_2_1_L3 = Linear(20, 10) .
+Mu_Kli4_3_1_L1 = Linear(1, 20) .
+Mu_Kli4_3_1_L2 = Linear(20, 20) .
+Mu_Kli4_3_1_L3 = Linear(20, 10) .
+Mu_Kli5_0_1_L1 = Linear(1, 20) .
+Mu_Kli5_0_1_L2 = Linear(20, 20) .
+Mu_Kli5_0_1_L3 = Linear(20, 10) .
+Mu_Kli5_1_1_L1 = Linear(1, 20) .
+Mu_Kli5_1_1_L2 = Linear(20, 20) .
+Mu_Kli5_1_1_L3 = Linear(20, 10) .
+Mu_Kli5_2_1_L1 = Linear(1, 20) .
+Mu_Kli5_2_1_L2 = Linear(20, 20) .
+Mu_Kli5_2_1_L3 = Linear(20, 10) .
+Mu_Kli5_3_1_L1 = Linear(1, 20) .
+Mu_Kli5_3_1_L2 = Linear(20, 20) .
+Mu_Kli5_3_1_L3 = Linear(20, 10) .
+Mu_Kli5_4_1_L1 = Linear(1, 20) .
+Mu_Kli5_4_1_L2 = Linear(20, 20) .
+Mu_Kli5_4_1_L3 = Linear(20, 10) .
+Rho_1_L1 = Linear(10, 20) .
+Rho_1_L2 = Linear(20, 20) .
+Rho_1_L3 = Linear(20, 10) .
+Classifier = Linear(10, 10) .
+
+d_in = 1 .
+d_k = 10 .
+d_hidden = 20 .
+num_classes = 10 .
+
+H0(graph_id, n; z) :- Node(graph_id, n; z) .
+
+H0_v(graph_id, v; z) :- H0(graph_id, v; z) .
+H0_w(graph_id, w; z) :- H0(graph_id, w; z) .
+H0_x(graph_id, x; z) :- H0(graph_id, x; z) .
+H0_y(graph_id, y; z) :- H0(graph_id, y; z) .
+
+Cyc2_T0_1(graph_id, u, v; Mu_Cyc2_0_1_L3(ReLU()(Mu_Cyc2_0_1_L2(ReLU()(Mu_Cyc2_0_1_L1(z)))))) :- Edge(graph_id, u, v; _), H0(graph_id, u; z) .
+Cyc2_T1_1(graph_id, u, v; Mu_Cyc2_1_1_L3(ReLU()(Mu_Cyc2_1_1_L2(ReLU()(Mu_Cyc2_1_1_L1(z)))))) :- Edge(graph_id, u, v; _), H0_v(graph_id, v; z) .
+Cyc2_Agg_1(graph_id, u; sum(z0 * z1)) :- Cyc2_T0_1(graph_id, u, v; z0), Cyc2_T1_1(graph_id, u, v; z1) .
+
+Edge_Kli3_0_1(graph_id, u, v; z) :- Edge(graph_id, u, v; z) .
+Edge_Kli3_0_2(graph_id, u, w; z) :- Edge(graph_id, u, w; z) .
+Edge_Kli3_1_2(graph_id, v, w; z) :- Edge(graph_id, v, w; z) .
+Hom_Kli3(graph_id, u, v, w; z) :- Edge_Kli3_0_1(graph_id, u, v; z), Edge_Kli3_0_2(graph_id, u, w; _), Edge_Kli3_1_2(graph_id, v, w; _) .
+
+Kli3_T0_1(graph_id, u, v, w; Mu_Kli3_0_1_L3(ReLU()(Mu_Kli3_0_1_L2(ReLU()(Mu_Kli3_0_1_L1(z)))))) :- Hom_Kli3(graph_id, u, v, w; _), H0(graph_id, u; z) .
+Kli3_T1_1(graph_id, u, v, w; Mu_Kli3_1_1_L3(ReLU()(Mu_Kli3_1_1_L2(ReLU()(Mu_Kli3_1_1_L1(z)))))) :- Hom_Kli3(graph_id, u, v, w; _), H0_v(graph_id, v; z) .
+Kli3_T2_1(graph_id, u, v, w; Mu_Kli3_2_1_L3(ReLU()(Mu_Kli3_2_1_L2(ReLU()(Mu_Kli3_2_1_L1(z)))))) :- Hom_Kli3(graph_id, u, v, w; _), H0_w(graph_id, w; z) .
+Kli3_Agg_1(graph_id, u; sum(z0 * z1 * z2)) :- Kli3_T0_1(graph_id, u, v, w; z0), Kli3_T1_1(graph_id, u, v, w; z1), Kli3_T2_1(graph_id, u, v, w; z2) .
+
+Edge_Kli4_0_1(graph_id, u, v; z) :- Edge(graph_id, u, v; z) .
+Edge_Kli4_0_2(graph_id, u, w; z) :- Edge(graph_id, u, w; z) .
+Edge_Kli4_0_3(graph_id, u, x; z) :- Edge(graph_id, u, x; z) .
+Edge_Kli4_1_2(graph_id, v, w; z) :- Edge(graph_id, v, w; z) .
+Edge_Kli4_1_3(graph_id, v, x; z) :- Edge(graph_id, v, x; z) .
+Edge_Kli4_2_3(graph_id, w, x; z) :- Edge(graph_id, w, x; z) .
+Hom_Kli4(graph_id, u, v, w, x; z) :- Edge_Kli4_0_1(graph_id, u, v; z), Edge_Kli4_0_2(graph_id, u, w; _), Edge_Kli4_0_3(graph_id, u, x; _), Edge_Kli4_1_2(graph_id, v, w; _), Edge_Kli4_1_3(graph_id, v, x; _), Edge_Kli4_2_3(graph_id, w, x; _) .
+
+Kli4_T0_1(graph_id, u, v, w, x; Mu_Kli4_0_1_L3(ReLU()(Mu_Kli4_0_1_L2(ReLU()(Mu_Kli4_0_1_L1(z)))))) :- Hom_Kli4(graph_id, u, v, w, x; _), H0(graph_id, u; z) .
+Kli4_T1_1(graph_id, u, v, w, x; Mu_Kli4_1_1_L3(ReLU()(Mu_Kli4_1_1_L2(ReLU()(Mu_Kli4_1_1_L1(z)))))) :- Hom_Kli4(graph_id, u, v, w, x; _), H0_v(graph_id, v; z) .
+Kli4_T2_1(graph_id, u, v, w, x; Mu_Kli4_2_1_L3(ReLU()(Mu_Kli4_2_1_L2(ReLU()(Mu_Kli4_2_1_L1(z)))))) :- Hom_Kli4(graph_id, u, v, w, x; _), H0_w(graph_id, w; z) .
+Kli4_T3_1(graph_id, u, v, w, x; Mu_Kli4_3_1_L3(ReLU()(Mu_Kli4_3_1_L2(ReLU()(Mu_Kli4_3_1_L1(z)))))) :- Hom_Kli4(graph_id, u, v, w, x; _), H0_x(graph_id, x; z) .
+Kli4_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3)) :- Kli4_T0_1(graph_id, u, v, w, x; z0), Kli4_T1_1(graph_id, u, v, w, x; z1), Kli4_T2_1(graph_id, u, v, w, x; z2), Kli4_T3_1(graph_id, u, v, w, x; z3) .
+
+Edge_Kli5_0_1(graph_id, u, v; z) :- Edge(graph_id, u, v; z) .
+Edge_Kli5_0_2(graph_id, u, w; z) :- Edge(graph_id, u, w; z) .
+Edge_Kli5_0_3(graph_id, u, x; z) :- Edge(graph_id, u, x; z) .
+Edge_Kli5_0_4(graph_id, u, y; z) :- Edge(graph_id, u, y; z) .
+Edge_Kli5_1_2(graph_id, v, w; z) :- Edge(graph_id, v, w; z) .
+Edge_Kli5_1_3(graph_id, v, x; z) :- Edge(graph_id, v, x; z) .
+Edge_Kli5_1_4(graph_id, v, y; z) :- Edge(graph_id, v, y; z) .
+Edge_Kli5_2_3(graph_id, w, x; z) :- Edge(graph_id, w, x; z) .
+Edge_Kli5_2_4(graph_id, w, y; z) :- Edge(graph_id, w, y; z) .
+Edge_Kli5_3_4(graph_id, x, y; z) :- Edge(graph_id, x, y; z) .
+Hom_Kli5(graph_id, u, v, w, x, y; z) :- Edge_Kli5_0_1(graph_id, u, v; z), Edge_Kli5_0_2(graph_id, u, w; _), Edge_Kli5_0_3(graph_id, u, x; _), Edge_Kli5_0_4(graph_id, u, y; _), Edge_Kli5_1_2(graph_id, v, w; _), Edge_Kli5_1_3(graph_id, v, x; _), Edge_Kli5_1_4(graph_id, v, y; _), Edge_Kli5_2_3(graph_id, w, x; _), Edge_Kli5_2_4(graph_id, w, y; _), Edge_Kli5_3_4(graph_id, x, y; _) .
+
+Kli5_T0_1(graph_id, u, v, w, x, y; Mu_Kli5_0_1_L3(ReLU()(Mu_Kli5_0_1_L2(ReLU()(Mu_Kli5_0_1_L1(z)))))) :- Hom_Kli5(graph_id, u, v, w, x, y; _), H0(graph_id, u; z) .
+Kli5_T1_1(graph_id, u, v, w, x, y; Mu_Kli5_1_1_L3(ReLU()(Mu_Kli5_1_1_L2(ReLU()(Mu_Kli5_1_1_L1(z)))))) :- Hom_Kli5(graph_id, u, v, w, x, y; _), H0_v(graph_id, v; z) .
+Kli5_T2_1(graph_id, u, v, w, x, y; Mu_Kli5_2_1_L3(ReLU()(Mu_Kli5_2_1_L2(ReLU()(Mu_Kli5_2_1_L1(z)))))) :- Hom_Kli5(graph_id, u, v, w, x, y; _), H0_w(graph_id, w; z) .
+Kli5_T3_1(graph_id, u, v, w, x, y; Mu_Kli5_3_1_L3(ReLU()(Mu_Kli5_3_1_L2(ReLU()(Mu_Kli5_3_1_L1(z)))))) :- Hom_Kli5(graph_id, u, v, w, x, y; _), H0_x(graph_id, x; z) .
+Kli5_T4_1(graph_id, u, v, w, x, y; Mu_Kli5_4_1_L3(ReLU()(Mu_Kli5_4_1_L2(ReLU()(Mu_Kli5_4_1_L1(z)))))) :- Hom_Kli5(graph_id, u, v, w, x, y; _), H0_y(graph_id, y; z) .
+Kli5_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3 * z4)) :- Kli5_T0_1(graph_id, u, v, w, x, y; z0), Kli5_T1_1(graph_id, u, v, w, x, y; z1), Kli5_T2_1(graph_id, u, v, w, x, y; z2), Kli5_T3_1(graph_id, u, v, w, x, y; z3), Kli5_T4_1(graph_id, u, v, w, x, y; z4) .
+
+AllPats_1(graph_id, n; z) :- Cyc2_Agg_1(graph_id, n; z) | Kli3_Agg_1(graph_id, n; z) | Kli4_Agg_1(graph_id, n; z) | Kli5_Agg_1(graph_id, n; z) .
+SumPats_1(graph_id, n; sum(z)) :- AllPats_1(graph_id, n; z) .
+H1(graph_id, n; Rho_1_L3(ReLU()(Rho_1_L2(ReLU()(Rho_1_L1(z)))))) :- SumPats_1(graph_id, n; z) .
+
+GraphEmb(graph_id; sum(z)) :- H1(graph_id, n; z) .
+GraphLogits(graph_id; Classifier(z)) :- GraphEmb(graph_id; z) .
+
+#lang:relnn
+?fit <epochs=1200, lr=0.001> Loss(; CrossEntropyLoss()(z_pred, z_label)) :- GraphLogits(graph_id; z_pred), GraphLabel(graph_id; z_label) .
+
+#lang:relnn
+?pred Predictions(graph_id; ArgMax()(z)) :- GraphLogits(graph_id; z) .

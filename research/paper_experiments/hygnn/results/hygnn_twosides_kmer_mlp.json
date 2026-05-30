@@ -1,0 +1,43 @@
+{
+  "schema": "hygnn_compare_v1",
+  "generated_utc": "2026-04-04",
+  "command": "python nbs/paper_experiments/hygnn/run_compare_hygnn.py --source TWOSIDES --substructure kmer --decoder mlp",
+  "settings": {
+    "source": "TWOSIDES",
+    "substructure": "kmer",
+    "k": 9,
+    "decoder": "mlp",
+    "epochs": 500,
+    "lr": 0.005,
+    "seed": 42,
+    "weight_sync": "pyg_to_relnn_before_training"
+  },
+  "loc_counts": {
+    "pytorch_reference_non_comment": 150,
+    "pytorch_reference_file_slice_lines_48_218": 171,
+    "relnn_mlp_dsl_lines": 41,
+    "loc_method": "reference: non-empty, non-comment lines in run_hygnn_pytorch_ref.py HyGNNLayer+HyGNN+compute_loss; relnn: DSL strings RELNN_DEFINE_CORE+PAIRSCORE_MLP+FIT_MLP+TESTSCORE_MLP+PRED+MATERIALIZE in run_compare_hygnn.py"
+  },
+  "pytorch_reference": {
+    "test_accuracy": 0.8782,
+    "f1": 0.8786,
+    "roc_auc": 0.9535,
+    "pr_auc": 0.9570,
+    "params_total": 181761,
+    "params_encoder": 148736,
+    "train_wall_time_s": 331.2
+  },
+  "relnn": {
+    "test_accuracy": 0.8761,
+    "f1": 0.8712,
+    "roc_auc": 0.953,
+    "pr_auc": 0.9569,
+    "params_total": 181761,
+    "params_encoder": 148736,
+    "train_wall_time_s": 306.7
+  },
+  "notes": [
+    "On Windows, set PYTHONIOENCODING=utf-8 (or PYTHONUTF8=1) if printing the dataset summary raises UnicodeEncodeError.",
+    "Training time is wall-clock for the fit loop only (compare script); excludes initial data download."
+  ]
+}

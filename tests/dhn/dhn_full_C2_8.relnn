@@ -1,0 +1,195 @@
+# Full DHN program (paper architecture)
+# Config: 1 layer, patterns C2..C8, d_in=1, d_k=10, d_hidden=20
+# This program achieves 100%% on CSL when fed the Hom tables
+
+# -- DEFINE --
+
+#lang:relnn
+Mu_Cyc2_0_1_L1 = Linear(1, 20) .
+Mu_Cyc2_0_1_L2 = Linear(20, 20) .
+Mu_Cyc2_0_1_L3 = Linear(20, 10) .
+Mu_Cyc2_1_1_L1 = Linear(1, 20) .
+Mu_Cyc2_1_1_L2 = Linear(20, 20) .
+Mu_Cyc2_1_1_L3 = Linear(20, 10) .
+Mu_Cyc3_0_1_L1 = Linear(1, 20) .
+Mu_Cyc3_0_1_L2 = Linear(20, 20) .
+Mu_Cyc3_0_1_L3 = Linear(20, 10) .
+Mu_Cyc3_1_1_L1 = Linear(1, 20) .
+Mu_Cyc3_1_1_L2 = Linear(20, 20) .
+Mu_Cyc3_1_1_L3 = Linear(20, 10) .
+Mu_Cyc3_2_1_L1 = Linear(1, 20) .
+Mu_Cyc3_2_1_L2 = Linear(20, 20) .
+Mu_Cyc3_2_1_L3 = Linear(20, 10) .
+Mu_Cyc4_0_1_L1 = Linear(1, 20) .
+Mu_Cyc4_0_1_L2 = Linear(20, 20) .
+Mu_Cyc4_0_1_L3 = Linear(20, 10) .
+Mu_Cyc4_1_1_L1 = Linear(1, 20) .
+Mu_Cyc4_1_1_L2 = Linear(20, 20) .
+Mu_Cyc4_1_1_L3 = Linear(20, 10) .
+Mu_Cyc4_2_1_L1 = Linear(1, 20) .
+Mu_Cyc4_2_1_L2 = Linear(20, 20) .
+Mu_Cyc4_2_1_L3 = Linear(20, 10) .
+Mu_Cyc4_3_1_L1 = Linear(1, 20) .
+Mu_Cyc4_3_1_L2 = Linear(20, 20) .
+Mu_Cyc4_3_1_L3 = Linear(20, 10) .
+Mu_Cyc5_0_1_L1 = Linear(1, 20) .
+Mu_Cyc5_0_1_L2 = Linear(20, 20) .
+Mu_Cyc5_0_1_L3 = Linear(20, 10) .
+Mu_Cyc5_1_1_L1 = Linear(1, 20) .
+Mu_Cyc5_1_1_L2 = Linear(20, 20) .
+Mu_Cyc5_1_1_L3 = Linear(20, 10) .
+Mu_Cyc5_2_1_L1 = Linear(1, 20) .
+Mu_Cyc5_2_1_L2 = Linear(20, 20) .
+Mu_Cyc5_2_1_L3 = Linear(20, 10) .
+Mu_Cyc5_3_1_L1 = Linear(1, 20) .
+Mu_Cyc5_3_1_L2 = Linear(20, 20) .
+Mu_Cyc5_3_1_L3 = Linear(20, 10) .
+Mu_Cyc5_4_1_L1 = Linear(1, 20) .
+Mu_Cyc5_4_1_L2 = Linear(20, 20) .
+Mu_Cyc5_4_1_L3 = Linear(20, 10) .
+Mu_Cyc6_0_1_L1 = Linear(1, 20) .
+Mu_Cyc6_0_1_L2 = Linear(20, 20) .
+Mu_Cyc6_0_1_L3 = Linear(20, 10) .
+Mu_Cyc6_1_1_L1 = Linear(1, 20) .
+Mu_Cyc6_1_1_L2 = Linear(20, 20) .
+Mu_Cyc6_1_1_L3 = Linear(20, 10) .
+Mu_Cyc6_2_1_L1 = Linear(1, 20) .
+Mu_Cyc6_2_1_L2 = Linear(20, 20) .
+Mu_Cyc6_2_1_L3 = Linear(20, 10) .
+Mu_Cyc6_3_1_L1 = Linear(1, 20) .
+Mu_Cyc6_3_1_L2 = Linear(20, 20) .
+Mu_Cyc6_3_1_L3 = Linear(20, 10) .
+Mu_Cyc6_4_1_L1 = Linear(1, 20) .
+Mu_Cyc6_4_1_L2 = Linear(20, 20) .
+Mu_Cyc6_4_1_L3 = Linear(20, 10) .
+Mu_Cyc6_5_1_L1 = Linear(1, 20) .
+Mu_Cyc6_5_1_L2 = Linear(20, 20) .
+Mu_Cyc6_5_1_L3 = Linear(20, 10) .
+Mu_Cyc7_0_1_L1 = Linear(1, 20) .
+Mu_Cyc7_0_1_L2 = Linear(20, 20) .
+Mu_Cyc7_0_1_L3 = Linear(20, 10) .
+Mu_Cyc7_1_1_L1 = Linear(1, 20) .
+Mu_Cyc7_1_1_L2 = Linear(20, 20) .
+Mu_Cyc7_1_1_L3 = Linear(20, 10) .
+Mu_Cyc7_2_1_L1 = Linear(1, 20) .
+Mu_Cyc7_2_1_L2 = Linear(20, 20) .
+Mu_Cyc7_2_1_L3 = Linear(20, 10) .
+Mu_Cyc7_3_1_L1 = Linear(1, 20) .
+Mu_Cyc7_3_1_L2 = Linear(20, 20) .
+Mu_Cyc7_3_1_L3 = Linear(20, 10) .
+Mu_Cyc7_4_1_L1 = Linear(1, 20) .
+Mu_Cyc7_4_1_L2 = Linear(20, 20) .
+Mu_Cyc7_4_1_L3 = Linear(20, 10) .
+Mu_Cyc7_5_1_L1 = Linear(1, 20) .
+Mu_Cyc7_5_1_L2 = Linear(20, 20) .
+Mu_Cyc7_5_1_L3 = Linear(20, 10) .
+Mu_Cyc7_6_1_L1 = Linear(1, 20) .
+Mu_Cyc7_6_1_L2 = Linear(20, 20) .
+Mu_Cyc7_6_1_L3 = Linear(20, 10) .
+Mu_Cyc8_0_1_L1 = Linear(1, 20) .
+Mu_Cyc8_0_1_L2 = Linear(20, 20) .
+Mu_Cyc8_0_1_L3 = Linear(20, 10) .
+Mu_Cyc8_1_1_L1 = Linear(1, 20) .
+Mu_Cyc8_1_1_L2 = Linear(20, 20) .
+Mu_Cyc8_1_1_L3 = Linear(20, 10) .
+Mu_Cyc8_2_1_L1 = Linear(1, 20) .
+Mu_Cyc8_2_1_L2 = Linear(20, 20) .
+Mu_Cyc8_2_1_L3 = Linear(20, 10) .
+Mu_Cyc8_3_1_L1 = Linear(1, 20) .
+Mu_Cyc8_3_1_L2 = Linear(20, 20) .
+Mu_Cyc8_3_1_L3 = Linear(20, 10) .
+Mu_Cyc8_4_1_L1 = Linear(1, 20) .
+Mu_Cyc8_4_1_L2 = Linear(20, 20) .
+Mu_Cyc8_4_1_L3 = Linear(20, 10) .
+Mu_Cyc8_5_1_L1 = Linear(1, 20) .
+Mu_Cyc8_5_1_L2 = Linear(20, 20) .
+Mu_Cyc8_5_1_L3 = Linear(20, 10) .
+Mu_Cyc8_6_1_L1 = Linear(1, 20) .
+Mu_Cyc8_6_1_L2 = Linear(20, 20) .
+Mu_Cyc8_6_1_L3 = Linear(20, 10) .
+Mu_Cyc8_7_1_L1 = Linear(1, 20) .
+Mu_Cyc8_7_1_L2 = Linear(20, 20) .
+Mu_Cyc8_7_1_L3 = Linear(20, 10) .
+Rho_1_L1 = Linear(70, 20) .
+Rho_1_L2 = Linear(20, 20) .
+Rho_1_L3 = Linear(20, 10) .
+Classifier = Linear(10, 10) .
+
+d_in = 1 .
+d_k = 10 .
+d_hidden = 20 .
+num_classes = 10 .
+
+H0(graph_id, n; z) :- Node(graph_id, n; z) .
+
+H0_v(graph_id, v; z) :- H0(graph_id, v; z) .
+H0_w(graph_id, w; z) :- H0(graph_id, w; z) .
+H0_x(graph_id, x; z) :- H0(graph_id, x; z) .
+H0_y(graph_id, y; z) :- H0(graph_id, y; z) .
+H0_z(graph_id, z; z) :- H0(graph_id, z; z) .
+H0_a(graph_id, a; z) :- H0(graph_id, a; z) .
+H0_b(graph_id, b; z) :- H0(graph_id, b; z) .
+
+Cyc2_T0_1(graph_id, u, v; Mu_Cyc2_0_1_L3(ReLU()(Mu_Cyc2_0_1_L2(ReLU()(Mu_Cyc2_0_1_L1(z))))) * w_hom) :- Hom_C2(graph_id, u, v; w_hom), H0(graph_id, u; z) .
+Cyc2_T1_1(graph_id, u, v; Mu_Cyc2_1_1_L3(ReLU()(Mu_Cyc2_1_1_L2(ReLU()(Mu_Cyc2_1_1_L1(z)))))) :- Hom_C2(graph_id, u, v; _), H0_v(graph_id, v; z) .
+Cyc2_Agg_1(graph_id, u; sum(z0 * z1)) :- Cyc2_T0_1(graph_id, u, v; z0), Cyc2_T1_1(graph_id, u, v; z1) .
+
+Cyc3_T0_1(graph_id, u, v, w; Mu_Cyc3_0_1_L3(ReLU()(Mu_Cyc3_0_1_L2(ReLU()(Mu_Cyc3_0_1_L1(z))))) * w_hom) :- Hom_C3(graph_id, u, v, w; w_hom), H0(graph_id, u; z) .
+Cyc3_T1_1(graph_id, u, v, w; Mu_Cyc3_1_1_L3(ReLU()(Mu_Cyc3_1_1_L2(ReLU()(Mu_Cyc3_1_1_L1(z)))))) :- Hom_C3(graph_id, u, v, w; _), H0_v(graph_id, v; z) .
+Cyc3_T2_1(graph_id, u, v, w; Mu_Cyc3_2_1_L3(ReLU()(Mu_Cyc3_2_1_L2(ReLU()(Mu_Cyc3_2_1_L1(z)))))) :- Hom_C3(graph_id, u, v, w; _), H0_w(graph_id, w; z) .
+Cyc3_Agg_1(graph_id, u; sum(z0 * z1 * z2)) :- Cyc3_T0_1(graph_id, u, v, w; z0), Cyc3_T1_1(graph_id, u, v, w; z1), Cyc3_T2_1(graph_id, u, v, w; z2) .
+
+Cyc4_T0_1(graph_id, u, v, w, x; Mu_Cyc4_0_1_L3(ReLU()(Mu_Cyc4_0_1_L2(ReLU()(Mu_Cyc4_0_1_L1(z))))) * w_hom) :- Hom_C4(graph_id, u, v, w, x; w_hom), H0(graph_id, u; z) .
+Cyc4_T1_1(graph_id, u, v, w, x; Mu_Cyc4_1_1_L3(ReLU()(Mu_Cyc4_1_1_L2(ReLU()(Mu_Cyc4_1_1_L1(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0_v(graph_id, v; z) .
+Cyc4_T2_1(graph_id, u, v, w, x; Mu_Cyc4_2_1_L3(ReLU()(Mu_Cyc4_2_1_L2(ReLU()(Mu_Cyc4_2_1_L1(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0_w(graph_id, w; z) .
+Cyc4_T3_1(graph_id, u, v, w, x; Mu_Cyc4_3_1_L3(ReLU()(Mu_Cyc4_3_1_L2(ReLU()(Mu_Cyc4_3_1_L1(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0_x(graph_id, x; z) .
+Cyc4_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3)) :- Cyc4_T0_1(graph_id, u, v, w, x; z0), Cyc4_T1_1(graph_id, u, v, w, x; z1), Cyc4_T2_1(graph_id, u, v, w, x; z2), Cyc4_T3_1(graph_id, u, v, w, x; z3) .
+
+Cyc5_T0_1(graph_id, u, v, w, x, y; Mu_Cyc5_0_1_L3(ReLU()(Mu_Cyc5_0_1_L2(ReLU()(Mu_Cyc5_0_1_L1(z))))) * w_hom) :- Hom_C5(graph_id, u, v, w, x, y; w_hom), H0(graph_id, u; z) .
+Cyc5_T1_1(graph_id, u, v, w, x, y; Mu_Cyc5_1_1_L3(ReLU()(Mu_Cyc5_1_1_L2(ReLU()(Mu_Cyc5_1_1_L1(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0_v(graph_id, v; z) .
+Cyc5_T2_1(graph_id, u, v, w, x, y; Mu_Cyc5_2_1_L3(ReLU()(Mu_Cyc5_2_1_L2(ReLU()(Mu_Cyc5_2_1_L1(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0_w(graph_id, w; z) .
+Cyc5_T3_1(graph_id, u, v, w, x, y; Mu_Cyc5_3_1_L3(ReLU()(Mu_Cyc5_3_1_L2(ReLU()(Mu_Cyc5_3_1_L1(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0_x(graph_id, x; z) .
+Cyc5_T4_1(graph_id, u, v, w, x, y; Mu_Cyc5_4_1_L3(ReLU()(Mu_Cyc5_4_1_L2(ReLU()(Mu_Cyc5_4_1_L1(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0_y(graph_id, y; z) .
+Cyc5_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3 * z4)) :- Cyc5_T0_1(graph_id, u, v, w, x, y; z0), Cyc5_T1_1(graph_id, u, v, w, x, y; z1), Cyc5_T2_1(graph_id, u, v, w, x, y; z2), Cyc5_T3_1(graph_id, u, v, w, x, y; z3), Cyc5_T4_1(graph_id, u, v, w, x, y; z4) .
+
+Cyc6_T0_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_0_1_L3(ReLU()(Mu_Cyc6_0_1_L2(ReLU()(Mu_Cyc6_0_1_L1(z))))) * w_hom) :- Hom_C6(graph_id, u, v, w, x, y, z; w_hom), H0(graph_id, u; z) .
+Cyc6_T1_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_1_1_L3(ReLU()(Mu_Cyc6_1_1_L2(ReLU()(Mu_Cyc6_1_1_L1(z)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0_v(graph_id, v; z) .
+Cyc6_T2_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_2_1_L3(ReLU()(Mu_Cyc6_2_1_L2(ReLU()(Mu_Cyc6_2_1_L1(z)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0_w(graph_id, w; z) .
+Cyc6_T3_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_3_1_L3(ReLU()(Mu_Cyc6_3_1_L2(ReLU()(Mu_Cyc6_3_1_L1(z)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0_x(graph_id, x; z) .
+Cyc6_T4_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_4_1_L3(ReLU()(Mu_Cyc6_4_1_L2(ReLU()(Mu_Cyc6_4_1_L1(z)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0_y(graph_id, y; z) .
+Cyc6_T5_1(graph_id, u, v, w, x, y, z; Mu_Cyc6_5_1_L3(ReLU()(Mu_Cyc6_5_1_L2(ReLU()(Mu_Cyc6_5_1_L1(z)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0_z(graph_id, z; z) .
+Cyc6_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5)) :- Cyc6_T0_1(graph_id, u, v, w, x, y, z; z0), Cyc6_T1_1(graph_id, u, v, w, x, y, z; z1), Cyc6_T2_1(graph_id, u, v, w, x, y, z; z2), Cyc6_T3_1(graph_id, u, v, w, x, y, z; z3), Cyc6_T4_1(graph_id, u, v, w, x, y, z; z4), Cyc6_T5_1(graph_id, u, v, w, x, y, z; z5) .
+
+Cyc7_T0_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_0_1_L3(ReLU()(Mu_Cyc7_0_1_L2(ReLU()(Mu_Cyc7_0_1_L1(z))))) * w_hom) :- Hom_C7(graph_id, u, v, w, x, y, z, a; w_hom), H0(graph_id, u; z) .
+Cyc7_T1_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_1_1_L3(ReLU()(Mu_Cyc7_1_1_L2(ReLU()(Mu_Cyc7_1_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_v(graph_id, v; z) .
+Cyc7_T2_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_2_1_L3(ReLU()(Mu_Cyc7_2_1_L2(ReLU()(Mu_Cyc7_2_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_w(graph_id, w; z) .
+Cyc7_T3_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_3_1_L3(ReLU()(Mu_Cyc7_3_1_L2(ReLU()(Mu_Cyc7_3_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_x(graph_id, x; z) .
+Cyc7_T4_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_4_1_L3(ReLU()(Mu_Cyc7_4_1_L2(ReLU()(Mu_Cyc7_4_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_y(graph_id, y; z) .
+Cyc7_T5_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_5_1_L3(ReLU()(Mu_Cyc7_5_1_L2(ReLU()(Mu_Cyc7_5_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_z(graph_id, z; z) .
+Cyc7_T6_1(graph_id, u, v, w, x, y, z, a; Mu_Cyc7_6_1_L3(ReLU()(Mu_Cyc7_6_1_L2(ReLU()(Mu_Cyc7_6_1_L1(z)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0_a(graph_id, a; z) .
+Cyc7_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5 * z6)) :- Cyc7_T0_1(graph_id, u, v, w, x, y, z, a; z0), Cyc7_T1_1(graph_id, u, v, w, x, y, z, a; z1), Cyc7_T2_1(graph_id, u, v, w, x, y, z, a; z2), Cyc7_T3_1(graph_id, u, v, w, x, y, z, a; z3), Cyc7_T4_1(graph_id, u, v, w, x, y, z, a; z4), Cyc7_T5_1(graph_id, u, v, w, x, y, z, a; z5), Cyc7_T6_1(graph_id, u, v, w, x, y, z, a; z6) .
+
+Cyc8_T0_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_0_1_L3(ReLU()(Mu_Cyc8_0_1_L2(ReLU()(Mu_Cyc8_0_1_L1(z))))) * w_hom) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; w_hom), H0(graph_id, u; z) .
+Cyc8_T1_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_1_1_L3(ReLU()(Mu_Cyc8_1_1_L2(ReLU()(Mu_Cyc8_1_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_v(graph_id, v; z) .
+Cyc8_T2_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_2_1_L3(ReLU()(Mu_Cyc8_2_1_L2(ReLU()(Mu_Cyc8_2_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_w(graph_id, w; z) .
+Cyc8_T3_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_3_1_L3(ReLU()(Mu_Cyc8_3_1_L2(ReLU()(Mu_Cyc8_3_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_x(graph_id, x; z) .
+Cyc8_T4_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_4_1_L3(ReLU()(Mu_Cyc8_4_1_L2(ReLU()(Mu_Cyc8_4_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_y(graph_id, y; z) .
+Cyc8_T5_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_5_1_L3(ReLU()(Mu_Cyc8_5_1_L2(ReLU()(Mu_Cyc8_5_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_z(graph_id, z; z) .
+Cyc8_T6_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_6_1_L3(ReLU()(Mu_Cyc8_6_1_L2(ReLU()(Mu_Cyc8_6_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_a(graph_id, a; z) .
+Cyc8_T7_1(graph_id, u, v, w, x, y, z, a, b; Mu_Cyc8_7_1_L3(ReLU()(Mu_Cyc8_7_1_L2(ReLU()(Mu_Cyc8_7_1_L1(z)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0_b(graph_id, b; z) .
+Cyc8_Agg_1(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5 * z6 * z7)) :- Cyc8_T0_1(graph_id, u, v, w, x, y, z, a, b; z0), Cyc8_T1_1(graph_id, u, v, w, x, y, z, a, b; z1), Cyc8_T2_1(graph_id, u, v, w, x, y, z, a, b; z2), Cyc8_T3_1(graph_id, u, v, w, x, y, z, a, b; z3), Cyc8_T4_1(graph_id, u, v, w, x, y, z, a, b; z4), Cyc8_T5_1(graph_id, u, v, w, x, y, z, a, b; z5), Cyc8_T6_1(graph_id, u, v, w, x, y, z, a, b; z6), Cyc8_T7_1(graph_id, u, v, w, x, y, z, a, b; z7) .
+
+H1(graph_id, n; Rho_1_L3(ReLU()(Rho_1_L2(ReLU()(Rho_1_L1(Concat(z_0, z_1, z_2, z_3, z_4, z_5, z_6))))))) :- Cyc2_Agg_1(graph_id, n; z_0), Cyc3_Agg_1(graph_id, n; z_1), Cyc4_Agg_1(graph_id, n; z_2), Cyc5_Agg_1(graph_id, n; z_3), Cyc6_Agg_1(graph_id, n; z_4), Cyc7_Agg_1(graph_id, n; z_5), Cyc8_Agg_1(graph_id, n; z_6) .
+
+GraphEmb(graph_id; sum(z)) :- H1(graph_id, n; z) .
+GraphLogits(graph_id; Classifier(z)) :- GraphEmb(graph_id; z) .
+
+# -- FIT --
+
+#lang:relnn
+?fit <epochs=500, lr=0.001> Loss(; CrossEntropyLoss()(z_pred, z_label)) :- GraphLogits(graph_id; z_pred), GraphLabel(graph_id; z_label) .
+
+# -- PREDICT --
+
+#lang:relnn
+?pred Predictions(graph_id; ArgMax()(z)) :- GraphLogits(graph_id; z) .

@@ -1,0 +1,75 @@
+# DHN C2:8 — templated version
+# 1 layer, patterns C2..C8, d_in=1, d_k=10, d_hidden=20
+# Uses named-module templates and no H0 aliases.
+# Assumes pre-computed Hom_C2..Hom_C8 tables in the database.
+
+#lang:relnn
+Mu_L1<k, i> = Linear(1, 20) .
+Mu_L2<k, i> = Linear(20, 20) .
+Mu_L3<k, i> = Linear(20, 10) .
+Rho_L1 = Linear(70, 20) .
+Rho_L2 = Linear(20, 20) .
+Rho_L3 = Linear(20, 10) .
+Classifier = Linear(10, 10) .
+
+H0(graph_id, n; z) :- Node(graph_id, n; z) .
+
+C2_T0(graph_id, u, v; Mu_L3<'C2', 0>(ReLU()(Mu_L2<'C2', 0>(ReLU()(Mu_L1<'C2', 0>(z))))) * w) :- Hom_C2(graph_id, u, v; w), H0(graph_id, u; z) .
+C2_T1(graph_id, u, v; Mu_L3<'C2', 1>(ReLU()(Mu_L2<'C2', 1>(ReLU()(Mu_L1<'C2', 1>(z)))))) :- Hom_C2(graph_id, u, v; _), H0(graph_id, v; z) .
+C2_Agg(graph_id, u; sum(z0 * z1)) :- C2_T0(graph_id, u, v; z0), C2_T1(graph_id, u, v; z1) .
+
+C3_T0(graph_id, u, v, w; Mu_L3<'C3', 0>(ReLU()(Mu_L2<'C3', 0>(ReLU()(Mu_L1<'C3', 0>(z))))) * wh) :- Hom_C3(graph_id, u, v, w; wh), H0(graph_id, u; z) .
+C3_T1(graph_id, u, v, w; Mu_L3<'C3', 1>(ReLU()(Mu_L2<'C3', 1>(ReLU()(Mu_L1<'C3', 1>(z)))))) :- Hom_C3(graph_id, u, v, w; _), H0(graph_id, v; z) .
+C3_T2(graph_id, u, v, w; Mu_L3<'C3', 2>(ReLU()(Mu_L2<'C3', 2>(ReLU()(Mu_L1<'C3', 2>(z)))))) :- Hom_C3(graph_id, u, v, w; _), H0(graph_id, w; z) .
+C3_Agg(graph_id, u; sum(z0 * z1 * z2)) :- C3_T0(graph_id, u, v, w; z0), C3_T1(graph_id, u, v, w; z1), C3_T2(graph_id, u, v, w; z2) .
+
+C4_T0(graph_id, u, v, w, x; Mu_L3<'C4', 0>(ReLU()(Mu_L2<'C4', 0>(ReLU()(Mu_L1<'C4', 0>(z))))) * wh) :- Hom_C4(graph_id, u, v, w, x; wh), H0(graph_id, u; z) .
+C4_T1(graph_id, u, v, w, x; Mu_L3<'C4', 1>(ReLU()(Mu_L2<'C4', 1>(ReLU()(Mu_L1<'C4', 1>(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0(graph_id, v; z) .
+C4_T2(graph_id, u, v, w, x; Mu_L3<'C4', 2>(ReLU()(Mu_L2<'C4', 2>(ReLU()(Mu_L1<'C4', 2>(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0(graph_id, w; z) .
+C4_T3(graph_id, u, v, w, x; Mu_L3<'C4', 3>(ReLU()(Mu_L2<'C4', 3>(ReLU()(Mu_L1<'C4', 3>(z)))))) :- Hom_C4(graph_id, u, v, w, x; _), H0(graph_id, x; z) .
+C4_Agg(graph_id, u; sum(z0 * z1 * z2 * z3)) :- C4_T0(graph_id, u, v, w, x; z0), C4_T1(graph_id, u, v, w, x; z1), C4_T2(graph_id, u, v, w, x; z2), C4_T3(graph_id, u, v, w, x; z3) .
+
+C5_T0(graph_id, u, v, w, x, y; Mu_L3<'C5', 0>(ReLU()(Mu_L2<'C5', 0>(ReLU()(Mu_L1<'C5', 0>(z))))) * wh) :- Hom_C5(graph_id, u, v, w, x, y; wh), H0(graph_id, u; z) .
+C5_T1(graph_id, u, v, w, x, y; Mu_L3<'C5', 1>(ReLU()(Mu_L2<'C5', 1>(ReLU()(Mu_L1<'C5', 1>(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0(graph_id, v; z) .
+C5_T2(graph_id, u, v, w, x, y; Mu_L3<'C5', 2>(ReLU()(Mu_L2<'C5', 2>(ReLU()(Mu_L1<'C5', 2>(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0(graph_id, w; z) .
+C5_T3(graph_id, u, v, w, x, y; Mu_L3<'C5', 3>(ReLU()(Mu_L2<'C5', 3>(ReLU()(Mu_L1<'C5', 3>(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0(graph_id, x; z) .
+C5_T4(graph_id, u, v, w, x, y; Mu_L3<'C5', 4>(ReLU()(Mu_L2<'C5', 4>(ReLU()(Mu_L1<'C5', 4>(z)))))) :- Hom_C5(graph_id, u, v, w, x, y; _), H0(graph_id, y; z) .
+C5_Agg(graph_id, u; sum(z0 * z1 * z2 * z3 * z4)) :- C5_T0(graph_id, u, v, w, x, y; z0), C5_T1(graph_id, u, v, w, x, y; z1), C5_T2(graph_id, u, v, w, x, y; z2), C5_T3(graph_id, u, v, w, x, y; z3), C5_T4(graph_id, u, v, w, x, y; z4) .
+
+C6_T0(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 0>(ReLU()(Mu_L2<'C6', 0>(ReLU()(Mu_L1<'C6', 0>(e))))) * wh) :- Hom_C6(graph_id, u, v, w, x, y, z; wh), H0(graph_id, u; e) .
+C6_T1(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 1>(ReLU()(Mu_L2<'C6', 1>(ReLU()(Mu_L1<'C6', 1>(e)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0(graph_id, v; e) .
+C6_T2(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 2>(ReLU()(Mu_L2<'C6', 2>(ReLU()(Mu_L1<'C6', 2>(e)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0(graph_id, w; e) .
+C6_T3(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 3>(ReLU()(Mu_L2<'C6', 3>(ReLU()(Mu_L1<'C6', 3>(e)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0(graph_id, x; e) .
+C6_T4(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 4>(ReLU()(Mu_L2<'C6', 4>(ReLU()(Mu_L1<'C6', 4>(e)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0(graph_id, y; e) .
+C6_T5(graph_id, u, v, w, x, y, z; Mu_L3<'C6', 5>(ReLU()(Mu_L2<'C6', 5>(ReLU()(Mu_L1<'C6', 5>(e)))))) :- Hom_C6(graph_id, u, v, w, x, y, z; _), H0(graph_id, z; e) .
+C6_Agg(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5)) :- C6_T0(graph_id, u, v, w, x, y, z; z0), C6_T1(graph_id, u, v, w, x, y, z; z1), C6_T2(graph_id, u, v, w, x, y, z; z2), C6_T3(graph_id, u, v, w, x, y, z; z3), C6_T4(graph_id, u, v, w, x, y, z; z4), C6_T5(graph_id, u, v, w, x, y, z; z5) .
+
+C7_T0(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 0>(ReLU()(Mu_L2<'C7', 0>(ReLU()(Mu_L1<'C7', 0>(e))))) * wh) :- Hom_C7(graph_id, u, v, w, x, y, z, a; wh), H0(graph_id, u; e) .
+C7_T1(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 1>(ReLU()(Mu_L2<'C7', 1>(ReLU()(Mu_L1<'C7', 1>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, v; e) .
+C7_T2(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 2>(ReLU()(Mu_L2<'C7', 2>(ReLU()(Mu_L1<'C7', 2>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, w; e) .
+C7_T3(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 3>(ReLU()(Mu_L2<'C7', 3>(ReLU()(Mu_L1<'C7', 3>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, x; e) .
+C7_T4(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 4>(ReLU()(Mu_L2<'C7', 4>(ReLU()(Mu_L1<'C7', 4>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, y; e) .
+C7_T5(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 5>(ReLU()(Mu_L2<'C7', 5>(ReLU()(Mu_L1<'C7', 5>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, z; e) .
+C7_T6(graph_id, u, v, w, x, y, z, a; Mu_L3<'C7', 6>(ReLU()(Mu_L2<'C7', 6>(ReLU()(Mu_L1<'C7', 6>(e)))))) :- Hom_C7(graph_id, u, v, w, x, y, z, a; _), H0(graph_id, a; e) .
+C7_Agg(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5 * z6)) :- C7_T0(graph_id, u, v, w, x, y, z, a; z0), C7_T1(graph_id, u, v, w, x, y, z, a; z1), C7_T2(graph_id, u, v, w, x, y, z, a; z2), C7_T3(graph_id, u, v, w, x, y, z, a; z3), C7_T4(graph_id, u, v, w, x, y, z, a; z4), C7_T5(graph_id, u, v, w, x, y, z, a; z5), C7_T6(graph_id, u, v, w, x, y, z, a; z6) .
+
+C8_T0(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 0>(ReLU()(Mu_L2<'C8', 0>(ReLU()(Mu_L1<'C8', 0>(e))))) * wh) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; wh), H0(graph_id, u; e) .
+C8_T1(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 1>(ReLU()(Mu_L2<'C8', 1>(ReLU()(Mu_L1<'C8', 1>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, v; e) .
+C8_T2(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 2>(ReLU()(Mu_L2<'C8', 2>(ReLU()(Mu_L1<'C8', 2>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, w; e) .
+C8_T3(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 3>(ReLU()(Mu_L2<'C8', 3>(ReLU()(Mu_L1<'C8', 3>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, x; e) .
+C8_T4(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 4>(ReLU()(Mu_L2<'C8', 4>(ReLU()(Mu_L1<'C8', 4>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, y; e) .
+C8_T5(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 5>(ReLU()(Mu_L2<'C8', 5>(ReLU()(Mu_L1<'C8', 5>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, z; e) .
+C8_T6(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 6>(ReLU()(Mu_L2<'C8', 6>(ReLU()(Mu_L1<'C8', 6>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, a; e) .
+C8_T7(graph_id, u, v, w, x, y, z, a, b; Mu_L3<'C8', 7>(ReLU()(Mu_L2<'C8', 7>(ReLU()(Mu_L1<'C8', 7>(e)))))) :- Hom_C8(graph_id, u, v, w, x, y, z, a, b; _), H0(graph_id, b; e) .
+C8_Agg(graph_id, u; sum(z0 * z1 * z2 * z3 * z4 * z5 * z6 * z7)) :- C8_T0(graph_id, u, v, w, x, y, z, a, b; z0), C8_T1(graph_id, u, v, w, x, y, z, a, b; z1), C8_T2(graph_id, u, v, w, x, y, z, a, b; z2), C8_T3(graph_id, u, v, w, x, y, z, a, b; z3), C8_T4(graph_id, u, v, w, x, y, z, a, b; z4), C8_T5(graph_id, u, v, w, x, y, z, a, b; z5), C8_T6(graph_id, u, v, w, x, y, z, a, b; z6), C8_T7(graph_id, u, v, w, x, y, z, a, b; z7) .
+
+H1(graph_id, n; Rho_L3(ReLU()(Rho_L2(ReLU()(Rho_L1(Concat(z0, z1, z2, z3, z4, z5, z6))))))) :- C2_Agg(graph_id, n; z0), C3_Agg(graph_id, n; z1), C4_Agg(graph_id, n; z2), C5_Agg(graph_id, n; z3), C6_Agg(graph_id, n; z4), C7_Agg(graph_id, n; z5), C8_Agg(graph_id, n; z6) .
+
+GraphEmb(graph_id; sum(z)) :- H1(graph_id, n; z) .
+GraphLogits(graph_id; Classifier(z)) :- GraphEmb(graph_id; z) .
+
+#lang:relnn
+?fit <epochs=500, lr=0.001> Loss(; CrossEntropyLoss()(z_pred, z_label)) :- GraphLogits(graph_id; z_pred), GraphLabel(graph_id; z_label) .
+
+#lang:relnn
+?pred Predictions(graph_id; ArgMax()(z)) :- GraphLogits(graph_id; z) .

@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "device": "cpu",
+    "runs": 5,
+    "epochs": 200,
+    "uniform_hparams": false,
+    "extra_relbench_tables": false,
+    "tuned_per_task": {
+      "driver-position": {
+        "hidden": 32,
+        "lr": 0.01,
+        "weight_decay": 0.0001
+      },
+      "driver-dnf": {
+        "hidden": 16,
+        "lr": 0.003,
+        "weight_decay": 0.0
+      }
+    }
+  },
+  "runs": [
+    {
+      "task_name": "driver-position",
+      "seed": 100,
+      "hidden": 32,
+      "epochs": 200,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "r2": 0.1521237106628862,
+        "mae": 3.9975198615051437,
+        "rmse": 4.797733285193937
+      },
+      "time_s": 0.09608100000150444,
+      "params": 6721
+    },
+    {
+      "task_name": "driver-position",
+      "seed": 101,
+      "hidden": 32,
+      "epochs": 200,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "r2": 0.15029761306342615,
+        "mae": 4.004747470537223,
+        "rmse": 4.802897020245155
+      },
+      "time_s": 0.09152870000070834,
+      "params": 6721
+    },
+    {
+      "task_name": "driver-position",
+      "seed": 102,
+      "hidden": 32,
+      "epochs": 200,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "r2": 0.1618361024270496,
+        "mae": 3.9647389523433247,
+        "rmse": 4.770175209384031
+      },
+      "time_s": 0.12106669999957376,
+      "params": 6721
+    },
+    {
+      "task_name": "driver-position",
+      "seed": 103,
+      "hidden": 32,
+      "epochs": 200,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "r2": 0.15708702428015353,
+        "mae": 3.9812636932400514,
+        "rmse": 4.783670145112005
+      },
+      "time_s": 0.1052373999991687,
+      "params": 6721
+    },
+    {
+      "task_name": "driver-position",
+      "seed": 104,
+      "hidden": 32,
+      "epochs": 200,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "r2": 0.1475593865163617,
+        "mae": 4.011103829692777,
+        "rmse": 4.810629634638242
+      },
+      "time_s": 0.08750849999887578,
+      "params": 6721
+    },
+    {
+      "task_name": "driver-dnf",
+      "seed": 100,
+      "hidden": 16,
+      "epochs": 200,
+      "lr": 0.003,
+      "weight_decay": 0.0,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.806258423348591,
+        "accuracy": 0.7264957264957265,
+        "f1": 0.8254545454545454,
+        "roc_auc": 0.615058800566047
+      },
+      "time_s": 0.32433880000098725,
+      "params": 2849
+    },
+    {
+      "task_name": "driver-dnf",
+      "seed": 101,
+      "hidden": 16,
+      "epochs": 200,
+      "lr": 0.003,
+      "weight_decay": 0.0,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.8057756226587994,
+        "accuracy": 0.7051282051282052,
+        "f1": 0.816651904340124,
+        "roc_auc": 0.6140340604108722
+      },
+      "time_s": 0.07915409999986878,
+      "params": 2849
+    },
+    {
+      "task_name": "driver-dnf",
+      "seed": 102,
+      "hidden": 16,
+      "epochs": 200,
+      "lr": 0.003,
+      "weight_decay": 0.0,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.7991120259457964,
+        "accuracy": 0.7264957264957265,
+        "f1": 0.8254545454545454,
+        "roc_auc": 0.5957644073586102
+      },
+      "time_s": 0.10204499999963446,
+      "params": 2849
+    },
+    {
+      "task_name": "driver-dnf",
+      "seed": 103,
+      "hidden": 16,
+      "epochs": 200,
+      "lr": 0.003,
+      "weight_decay": 0.0,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.8098666381488301,
+        "accuracy": 0.7264957264957265,
+        "f1": 0.8254545454545454,
+        "roc_auc": 0.6175669740887133
+      },
+      "time_s": 0.09155939999982365,
+      "params": 2849
+    },
+    {
+      "task_name": "driver-dnf",
+      "seed": 104,
+      "hidden": 16,
+      "epochs": 200,
+      "lr": 0.003,
+      "weight_decay": 0.0,
+      "extra_relbench_tables": false,
+      "metrics": {
+        "average_precision": 0.8113833494036554,
+        "accuracy": 0.7264957264957265,
+        "f1": 0.8254545454545454,
+        "roc_auc": 0.6187283462645782
+      },
+      "time_s": 0.08589600000050268,
+      "params": 2849
+    }
+  ]
+}

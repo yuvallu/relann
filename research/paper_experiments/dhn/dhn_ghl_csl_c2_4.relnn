@@ -1,0 +1,44 @@
+# DHN GHL — CSL C2:4 from Node + Edge (no Hom_*).  d_in=1, d_k=10, d_hidden=20, 10 classes.
+#
+# Data (build_dhn_db_edge):
+#   Node, Edge (2|undir E| directed rows, emb=1), AllNodePad (same keys as Node, emb=0, dim d_k=10)
+#
+# Per-pattern: Union(AllNodePad, C*_Sparse) then sum (DBLP-style "pad | agg" for full node coverage)
+#
+# Virtual “ArcFeat” = Edge ⋈ H0(root) ⋈ H0(tail) in one join (engine may fuse; no Concat/Split in this DSL for split Mu).
+#
+#lang:relnn
+Mu_L1<k, i> = Linear(1, 20) .
+Mu_L2<k, i> = Linear(20, 20) .
+Mu_L3<k, i> = Linear(20, 10) .
+Mu<k, i> = Mu_L3<k, i>(ReLU()(Mu_L2<k, i>(ReLU()(Mu_L1<k, i>(x))))) .
+Rho_L1 = Linear(30, 20) .
+Rho_L2 = Linear(20, 20) .
+Rho_L3 = Linear(20, 10) .
+Rho = Rho_L3(ReLU()(Rho_L2(ReLU()(Rho_L1(x))))) .
+Classifier = Linear(10, 10) .
+
+H0(graph_id, n; z) :- Node(graph_id, n; z) .
+
+# C2: one directed half-edge = one row in Edge; no * w (no self-loops in Edge). Root n.
+C2_Sparse(graph_id, n; sum(Mu<'C2', 0>(h_n) * Mu<'C2', 1>(h_v))) :- Edge(graph_id, n, v; we), H0(graph_id, n; h_n), H0(graph_id, v; h_v) .
+C2_Agg(graph_id, n; sum(t)) :- AllNodePad(graph_id, n; t0) | C2_Sparse(graph_id, n; t1) .
+
+# C3: triangle n→v→w→n; edge emb 1 on real edges.
+C3_Sparse(graph_id, n; sum(Mu<'C3', 0>(h_n) * Mu<'C3', 1>(h_v) * Mu<'C3', 2>(h_w))) :- Edge(graph_id, n, v; w1), Edge(graph_id, v, w; w2), Edge(graph_id, w, n; w3), H0(graph_id, n; h_n), H0(graph_id, v; h_v), H0(graph_id, w; h_w) .
+C3_Agg(graph_id, n; sum(t)) :- AllNodePad(graph_id, n; t0) | C3_Sparse(graph_id, n; t1) .
+
+# C4: 4-edge cycle; p = 4th node.
+C4_Sparse(graph_id, n; sum(Mu<'C4', 0>(h_n) * Mu<'C4', 1>(h_v) * Mu<'C4', 2>(h_w) * Mu<'C4', 3>(h_p))) :- Edge(graph_id, n, v; e1), Edge(graph_id, v, w; e2), Edge(graph_id, w, p; e3), Edge(graph_id, p, n; e4), H0(graph_id, n; h_n), H0(graph_id, v; h_v), H0(graph_id, w; h_w), H0(graph_id, p; h_p) .
+C4_Agg(graph_id, n; sum(t)) :- AllNodePad(graph_id, n; t0) | C4_Sparse(graph_id, n; t1) .
+
+H1(graph_id, n; Rho(Concat(z0, z1, z2))) :- C2_Agg(graph_id, n; z0), C3_Agg(graph_id, n; z1), C4_Agg(graph_id, n; z2) .
+
+GraphEmb(graph_id; sum(z)) :- H1(graph_id, n; z) .
+GraphLogits(graph_id; Classifier(z)) :- GraphEmb(graph_id; z) .
+
+#lang:relnn
+?fit <epochs=500, lr=0.001> Loss(; CrossEntropyLoss()(z_pred, z_label)) :- GraphLogits(graph_id; z_pred), GraphLabel(graph_id; z_label) .
+
+#lang:relnn
+?pred Predictions(graph_id; ArgMax()(z)) :- GraphLogits(graph_id; z) .
