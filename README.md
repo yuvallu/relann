@@ -4,7 +4,7 @@
 
 RelaNN lets you express deep neural networks directly over relational data using a Datalog-style query language with embedding semantics. Each tuple carries a learnable vector embedding; joins compose embeddings; group-by projections aggregate them. Programs are compiled to PyTorch + cuDF + SQL physical plans.
 
-This codebase is the open-source proof-of-concept implementation accompanying the paper *"Incorporating Deep Learning Design in Database Queries"* (VLDB TaDA 2026).
+This codebase is the open-source proof-of-concept implementation accompanying the paper *"Incorporating Deep Learning Design in Database Queries"*.
 
 ## Why RelaNN
 
@@ -112,7 +112,7 @@ uv run python scripts/run_tests.py full            # ~6min
 
 ## Paper & citation
 
-- Paper: *Incorporating Deep Learning Design in Database Queries.* Yuval Lev Lubarsky, Dean Light, Boaz Berger, Shunit Agmon, Benny Kimelfeld. VLDB TaDA 2026. [arXiv:2605.24207](https://arxiv.org/abs/2605.24207)
+- Paper: *Incorporating Deep Learning Design in Database Queries.* Yuval Lev Lubarsky, Dean Light, Boaz Berger, Shunit Agmon, Benny Kimelfeld. [arXiv:2605.24207](https://arxiv.org/abs/2605.24207)
 - Source: https://github.com/yuvallu/relann
 
 ## License
