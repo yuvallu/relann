@@ -29,27 +29,38 @@ dependencies = [
     # only have prebuilt wheels for that range. Override on a CUDA host as needed.
     "torch>=2.0,<2.7",
     "fastcore>=1.5,<1.13", # `@patch` decorator used throughout the codebase; pinned <1.13 due to a regression in how `_VArgsWrapper` (used by Lark's `@v_args`) interacts with the new co_qualname rewrite
-    # Runtime deps used by the package + bundled examples / tests:
     "scipy>=1.10",                  # used by some DHN homomorphism utilities
-    "matplotlib>=3.5",              # used by scaffold tests + some example plots
-    "scikit-learn>=1.3",            # used by examples/004 and HyGNN benchmarks
-    "relbench>=2.0",                # used by examples/005, examples/006
-    "stringdale>=0.5",              # used by test_904 (visualization helper)
-    "nbdev>=2.4",                   # transitive: stringdale imports nbdev at module load
 ]
 
 # NOTE: `torch-scatter`, `torch-geometric`, `torch-sparse`, `torch-cluster` are
-# intentionally NOT declared here. Their PyPI sdists need torch installed at
-# build time, which doesn't work in uv's isolated resolver. Install them
-# manually from the PyG wheel index after `uv sync`:
+# intentionally NOT declared here, and CANNOT be put in an extra either. They are
+# compiled C++/CUDA extensions that must match your exact torch + CUDA build, so
+# pip can't resolve the right wheel from PyPI — they ship as prebuilt wheels on
+# the PyG index and are installed out-of-band:
 #
-#   uv pip install torch-scatter torch-sparse torch-cluster torch-geometric \
-#       --no-build-isolation \
-#       -f https://data.pyg.org/whl/torch-2.5.1+cpu.html
+#   pip install --no-build-isolation torch-scatter torch-sparse torch-cluster torch-geometric \
+#       -f https://data.pyg.org/whl/torch-2.6.0+cu124.html   # swap cu124 for your tag, or +cpu
 #
-# Substitute the matching torch + cu/cpu tag for your host. See docs/install-gpu.md
-# for the GPU/RAPIDS install.
+# `import relann` works without them; only the scatter aggregation ops need them
+# (they raise a clear install hint if missing). See docs/install-gpu.md.
+
+[project.urls]
+Homepage = "https://github.com/yuvallu/relann"
+Repository = "https://github.com/yuvallu/relann"
+Paper = "https://arxiv.org/abs/2605.24207"
+
 [project.optional-dependencies]
+# Heavier deps only needed by the bundled examples / benchmarks / viz helpers,
+# kept out of the core install. e.g. `pip install "relann[examples,viz]"`.
+examples = [
+    "relbench>=2.0",      # examples/005, examples/006
+    "scikit-learn>=1.3",  # examples/004 + HyGNN benchmarks
+    "matplotlib>=3.5",    # example plots + scaffold tests
+]
+viz = [
+    "stringdale>=0.5",    # term-graph visualization helper for some demos/tests
+    "nbdev>=2.4",         # stringdale imports nbdev at load but doesn't declare it
+]
 benchmarks = [
     "ogb>=1.3",
 ]
