@@ -27,10 +27,46 @@ import torch
 import torch.nn as nn
 import numpy as np
 from typing import List, Dict, Any, Optional, Callable, Union
-from torch_scatter import scatter_add, scatter_softmax, scatter_mean
 from relann.pydantic_classes import ComparisonExpression, ArithTerm, Var
 
 logger = logging.getLogger(__name__)
+
+# %%
+# `torch_scatter` ships as compiled wheels matched to your exact torch + CUDA
+# build, so a plain `pip install relann` can't pull it (see docs/install-gpu.md).
+# Import it lazily: `import relann` then works without the PyG sparse stack, and
+# the scatter ops only raise an install hint if a scatter aggregation is run.
+def _require_torch_scatter():
+    try:
+        import torch_scatter
+    except ImportError as exc:
+        raise ImportError(
+            "relann's scatter/aggregation operators need the PyG sparse stack "
+            "(torch-scatter), which ships as prebuilt wheels matched to your "
+            "torch + CUDA build and is NOT installed by `pip install relann`.\n"
+            "Install it with:\n"
+            "    pip install --no-build-isolation torch-scatter torch-sparse "
+            "torch-cluster torch-geometric \\\n"
+            "        -f https://data.pyg.org/whl/torch-2.6.0+cu124.html\n"
+            "(swap cu124 for your CUDA tag, or +cpu for a CPU-only host). "
+            "See https://github.com/yuvallu/relann/blob/main/docs/install-gpu.md"
+        ) from exc
+    return torch_scatter
+
+
+def scatter_add(*args, **kwargs):
+    """Lazy passthrough to torch_scatter.scatter_add (see _require_torch_scatter)."""
+    return _require_torch_scatter().scatter_add(*args, **kwargs)
+
+
+def scatter_mean(*args, **kwargs):
+    """Lazy passthrough to torch_scatter.scatter_mean (see _require_torch_scatter)."""
+    return _require_torch_scatter().scatter_mean(*args, **kwargs)
+
+
+def scatter_softmax(*args, **kwargs):
+    """Lazy passthrough to torch_scatter.scatter_softmax (see _require_torch_scatter)."""
+    return _require_torch_scatter().scatter_softmax(*args, **kwargs)
 
 # %%
 # Import cuDF and pandas for GPU acceleration
@@ -1994,13 +2030,11 @@ def get_aggregation_function(name: str) -> Callable:
         return None
     name = name.lower()
     if name in ("mean", "avg"):
-        from torch_scatter import scatter_mean as _fn
-        return _fn
+        return _require_torch_scatter().scatter_mean
     if name in ("sum", "add"):
-        from torch_scatter import scatter_add as _fn
-        return _fn
+        return _require_torch_scatter().scatter_add
     if name == "max":
-        from torch_scatter import scatter_max as _scatter_max
+        _scatter_max = _require_torch_scatter().scatter_max
 
         def _scatter_max_values(x, idx, dim=0):
             out, _ = _scatter_max(x, idx, dim=dim)
