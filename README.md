@@ -27,30 +27,53 @@ The first rule joins `Treat`, `Queries`, `Keys` on `p` and `t`, composing the em
 
 ## Install
 
+relann is **GPU-first** (PyTorch + optional cuDF/RAPIDS). The steps below install the
+CUDA build; a CPU-only fallback is noted underneath.
+
 ```bash
-# 1. Install uv (https://astral.sh) if you don't have it
-pip install uv                       # or: brew install uv (macOS), curl -LsSf https://astral.sh/uv/install.sh | sh (Linux)
+# 1. Install the CUDA build of PyTorch FIRST. On Windows the default PyPI torch is
+#    CPU-only, so pull it from PyTorch's CUDA index. Swap cu124 for the tag matching
+#    your NVIDIA driver (cu118 / cu121 / cu124 / cu126 / ...).
+pip install torch --index-url https://download.pytorch.org/whl/cu124
 
-# 2. Clone & sync the environment
-git clone https://github.com/yuvallu/relann.git && cd relann
-uv sync                              # creates .venv with the base deps
+# 2. Install relann (torch is already satisfied, so pip won't pull a CPU wheel).
+pip install relann                       # core library
+pip install "relann[examples]"           # + relbench, scikit-learn, matplotlib (to run the examples)
+#   extras: [examples] [viz] [benchmarks] [sql] — combine like "relann[examples,viz]"
 
-# 3. Install PyG sparse extensions (required at module import time)
-#    Substitute your torch + cuda/cpu tag — see docs/install-gpu.md for details.
-uv pip install --no-build-isolation \
-    torch-scatter torch-sparse torch-cluster torch-geometric \
-    -f "https://data.pyg.org/whl/torch-2.6.0+cu124.html"     # CUDA 12.4 host
-#    Replace cu124 with cpu for a CPU-only laptop install.
-
-# 4. (Optional) install heavier test-time deps that some tests need
-uv pip install scipy nbdev stringdale                         # transitive for some demo/scaffold tests
-
-# 5. Install git hooks + generate Jupyter notebooks from .py files
-uv run poe init
-uv run poe nb
+# 3. Install the PyG sparse stack (torch-scatter & friends) used by relann's
+#    scatter/aggregation operators. These are prebuilt wheels matched to your torch
+#    version + CUDA tag, so they are NOT installed by `pip install relann`.
+pip install --no-build-isolation torch-scatter torch-sparse torch-cluster torch-geometric \
+    -f https://data.pyg.org/whl/torch-2.6.0+cu124.html
 ```
 
-For **GPU / cuDF / RAPIDS** support, see `docs/install-gpu.md`. The base `uv sync` plus the PyG step above gives you everything needed to run the smoke + feature test suites.
+> **`import relann` works without step 3** — only the scatter aggregation operators
+> require the PyG stack, and they raise a clear install hint if it's missing.
+>
+> **CPU-only fallback:** use `--index-url https://download.pytorch.org/whl/cpu` in step 1
+> and `+cpu` in step 3.
+>
+> **Why is step 3 separate?** `torch-scatter` / `torch-sparse` / `torch-cluster` are
+> compiled C++/CUDA extensions that must match your exact torch + CUDA build, so pip
+> can't resolve them from PyPI — they ship as prebuilt wheels on the PyG index. For full
+> **GPU / cuDF / RAPIDS** setup, see
+> [docs/install-gpu.md](https://github.com/yuvallu/relann/blob/main/docs/install-gpu.md).
+
+## Develop from source
+
+Working on relann itself uses [uv](https://astral.sh) and the juplit notebook workflow:
+
+```bash
+pip install uv      # or: brew install uv (macOS) · curl -LsSf https://astral.sh/uv/install.sh | sh (Linux)
+
+git clone https://github.com/yuvallu/relann.git && cd relann
+uv run poe full-setup    # uv sync + PyG sparse stack (CPU by default) + generate notebooks
+uv run poe init          # install git hooks
+```
+
+For a CUDA dev box, set `TORCH_PYG_URL` before `full-setup` (see
+[docs/install-gpu.md](https://github.com/yuvallu/relann/blob/main/docs/install-gpu.md)).
 
 ## Workflow
 

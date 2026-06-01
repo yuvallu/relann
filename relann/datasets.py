@@ -10,9 +10,21 @@ import urllib.request
 from typing import List, Tuple, Dict
 
 logger = logging.getLogger(__name__)
-import torch_geometric.transforms as T
-from torch_geometric.datasets import Planetoid
-from torch_geometric.utils import add_self_loops, degree
+try:
+    import torch_geometric.transforms as T
+    from torch_geometric.datasets import Planetoid
+    from torch_geometric.utils import add_self_loops, degree
+except ImportError as exc:
+    raise ImportError(
+        "relann.datasets loads PyTorch Geometric benchmark datasets (Cora, "
+        "Planetoid, DBLP), which need torch-geometric + the PyG sparse stack. "
+        "These aren't installed by `pip install relann`; add them with:\n"
+        "    pip install --no-build-isolation torch-scatter torch-sparse "
+        "torch-cluster torch-geometric \\\n"
+        "        -f https://data.pyg.org/whl/torch-2.6.0+cu124.html\n"
+        "(swap cu124 for your CUDA tag, or +cpu for a CPU-only host). "
+        "See https://github.com/yuvallu/relann/blob/main/docs/install-gpu.md"
+    ) from exc
 from pathlib import Path
 from relann.torch_utils import get_project_root
 from relann.era_operations import (
