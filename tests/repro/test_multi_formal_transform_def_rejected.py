@@ -1,8 +1,7 @@
 """Engine-policy pin: a ``TransformDef`` body that resolves to MORE THAN ONE
 free formal ``Var`` is rejected at substitution time.
 
-Background — see ``docs/design/transform-def-alias-substitution.md`` and the
-β-reduction code in ``relann/engine.py::_apply_call_argument`` /
+Background — see the β-reduction code in ``relann/engine.py::_apply_call_argument`` /
 ``relann/pydantic_classes.py::collect_formal_vars``.
 
 The pre-fix engine substituted a single hard-coded ``Var("inp")`` placeholder

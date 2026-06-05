@@ -155,10 +155,6 @@ Used in **`?pred`** rules as derived content attributes:
 
 Implemented in `Engine.predict()` as a post-step on the forward `EmbeddedRelation` (`Engine._apply_lhs_decode`).
 
-### Design doc
-
-See `docs/design/encode-decode.md`.
-
 ## Fit & Predict
 
 ```relnn
@@ -199,8 +195,6 @@ All embeddings are `(E, *feature_dims)` where E is the row dimension. Smart ops 
 - `transpose(z)` — `(E, d)` to `(E, d, 1)`; 3-D+ swaps last two dims
 - `view(dims)(z)` — reshapes feature dims only: `(E, *old)` to `(E, *dims)`
 - `sqrt`, `exp`, `ReLU`, etc. — element-wise, no special handling needed
-
-See `docs/design/row-first-tensor-convention.md` for the full contract.
 
 ## F-String Best Practice
 

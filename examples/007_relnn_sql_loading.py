@@ -15,7 +15,7 @@
 
 # %% [markdown]
 # **TL;DR — SQL for relations, RHS encode for node features.**  
-# This notebook runs the same 2-layer GCN as [hello-world](001_relnn_hello_world.ipynb), but **node keys** live in **SQLite** (`Papers` is **`pid` only**). BoW vectors are **not** stored as `f0…f1432` columns; they enter via **RHS encode** `[CoraNodeFeatures(pid)]` (see [encode-decode design](../../docs/design/encode-decode.md)).  
+# This notebook runs the same 2-layer GCN as [hello-world](001_relnn_hello_world.ipynb), but **node keys** live in **SQLite** (`Papers` is **`pid` only**). BoW vectors are **not** stored as `f0…f1432` columns; they enter via **RHS encode** `[CoraNodeFeatures(pid)]`.  
 # `DataFrameSource` still attaches a **tiny placeholder** `(N,1)` tensor so `Transformation` can run shape inference and `forward` (engine requirement); the **actual** 1433-dim inputs come only from the encoder. Labels use `DataFrameSource` with tensors from SQL as before.
 
 # %% [markdown]
@@ -156,8 +156,7 @@ with sqlite3.connect(DB_PATH) as _c:
 #
 # **`SqlSource`** — `Citation` is a pure relational edge list (no tensor).
 #
-# **`DataFrameSource` for `Papers`** — read `pid` from SQL; attach a **placeholder** `zeros(N, 1)` tensor so `Transformation.instantiate` / `forward` see a non-empty embedding (required today). **BoW rows still come only from** **`[CoraNodeFeatures(pid)]`**, not from that placeholder. See [encode-decode.md](../../docs/design/encode-decode.md).
-#
+# **`DataFrameSource` for `Papers`** — read `pid` from SQL; attach a **placeholder** `zeros(N, 1)` tensor so `Transformation.instantiate` / `forward` see a non-empty embedding (required today). **BoW rows still come only from** **`[CoraNodeFeatures(pid)]`**, not from that placeholder.#
 # **`DataFrameSource` for `Labels` / `TestLabels`** — same as before: key columns from SQL plus label tensors reconstructed from the `label` integer column.
 
 # %%
@@ -323,5 +322,4 @@ session.show_term_graph()
 #
 # **Next steps:**
 # - [`examples/008_relnn_dblp_sqlite.py`](008_relnn_dblp_sqlite.ipynb) — DBLP HGT showcase (larger graph, multiple node types) using the same SQL-loading pattern.
-# - [`docs/design/data-sources.md`](../docs/design/data-sources.md) — full `RelationSource` API and protocol.
 # - [`scripts/data_setup/cora_from_sqlite/build_cora_sqlite.py`](../scripts/data_setup/cora_from_sqlite/build_cora_sqlite.py) — standalone version of the `build_cora_sqlite()` helper above.

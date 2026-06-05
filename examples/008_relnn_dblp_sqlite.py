@@ -296,6 +296,5 @@ print("\nDemo complete.")
 # %% [markdown]
 # ## Next steps
 #
-# - [`docs/design/data-sources.md`](../docs/design/data-sources.md) — `RelationSource` API in depth.
 # - [`tests/slow/run_compare_dblp_hgt_generic.py`](../tests/slow/run_compare_dblp_hgt_generic.py) — the full rigorous comparison (param-count, weight-synced forward diff, training accuracy vs hand-rolled PyTorch) that produced the published 2026-03-30 DBLP benchmark.
 # - [`scripts/data_setup/dblp_from_sqlite/build_dblp_sqlite.py`](../scripts/data_setup/dblp_from_sqlite/build_dblp_sqlite.py) — how the SQLite was built.

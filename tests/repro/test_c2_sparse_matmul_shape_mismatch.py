@@ -12,8 +12,7 @@ directly to ``Linear(20, 10)`` → ``mat1 and mat2 shapes cannot be multiplied
 Root cause: ``Join._do_one_merge`` had nothing to do with it; the suffix fix
 was a separate concern. The actual fix is in ``engine.py``: replace the
 hard-coded ``Var('inp')`` placeholder with proper β-reduction over inferred
-formal parameters. Full design rationale in
-``docs/design/transform-def-alias-substitution.md``; live code lives in
+formal parameters. Live code lives in
 ``relann/engine.py::_apply_call_argument`` / ``_inject_formal_param``.
 
 These tests pass positively (no ``pytest.raises``) and document the post-fix

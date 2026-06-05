@@ -24,7 +24,6 @@ You can also read them as plain Markdown — they're useful reference for any ag
 | **`juplit-programming.md`** | Working with `.py` ↔ `.ipynb` paired notebooks — cell delimiters, `if test():` blocks, `poe` task commands. |
 | **`juplit-migrate-from-nbdev.md`** | Migrating an nbdev codebase to juplit (only relevant for outside repos — this one is already migrated). |
 | **`planning-and-git-policy.md`** | Before starting any non-trivial change — asks clarifying questions first, never push without explicit permission, commit only when asked. |
-| **`design-and-testing-doc-discipline.md`** | Whenever repo layout or test taxonomy changes — keeps `docs/design/repo-structure.md`, `docs/design/testing-strategy.md`, `TESTING.md`, and `tests/README.md` aligned. |
 
 ## Adding a new skill
 

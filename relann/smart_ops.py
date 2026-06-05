@@ -14,8 +14,6 @@ Smart ops fix this by aligning dimensions before delegating to torch:
     smart_matmul: position-specific unsqueeze (-2 for left, -1 for right)
     smart_transpose: (E, d) -> (E, d, 1) column-vector per row
     smart_view:   reshape feature dims only, preserve row dim
-
-See docs/design/row-first-tensor-convention.md for the full convention.
 """
 
 from __future__ import annotations

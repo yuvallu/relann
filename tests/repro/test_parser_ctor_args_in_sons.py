@@ -7,8 +7,7 @@
 
 Mirrors the live assertion in ``relann/parser.py:~2231``'s demo block.
 If this test breaks, the parser representation has changed — revisit both
-this file and that demo together. See
-``docs/design/notebook-demos.md::Resolved: parser.py:2223``.
+this file and that demo together.
 """
 from __future__ import annotations
 

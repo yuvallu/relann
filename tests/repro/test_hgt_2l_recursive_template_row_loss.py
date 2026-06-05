@@ -33,9 +33,7 @@ Background:
     the engine reports `Non-finite loss encountered at epoch 0: nan`.
 
     Pre-existing on `main` (verified at 5656608) and on
-    `claude/v2-next-version`. NOT a juplit regression. See:
-      docs/design/hgt-2l-recursive-template-row-loss.md
-      docs/_archive/hgt-status-2026-05-25.md  (Cause C)
+    `claude/v2-next-version`. NOT a juplit regression.
 
     The bug is in the engine's handling of single-element bounded-set
     expansion when the contained reference is itself another template
@@ -74,8 +72,7 @@ sys.path.insert(0, str(_REPO_ROOT / "tests" / "slow"))
     strict=True,
     reason=(
         "Engine bug: single-element Union(Set(...)) inside a recursive "
-        "template specialization at depth > 1 collapses to one row. "
-        "See docs/design/hgt-2l-recursive-template-row-loss.md."
+        "template specialization at depth > 1 collapses to one row."
     ),
 )
 def test_h_author_2_keeps_all_rows():
@@ -115,6 +112,5 @@ def test_h_author_2_keeps_all_rows():
     # The real assertion this pin protects. Currently FAILS (engine produces 1).
     assert n_rows(2) == 4057, (
         f"H<'Author', 2> has wrong row count. "
-        f"Engine row-loss bug at recursion depth > 1 — see "
-        f"docs/design/hgt-2l-recursive-template-row-loss.md"
+        f"Engine row-loss bug at recursion depth > 1."
     )

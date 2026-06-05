@@ -100,8 +100,7 @@ class RelationSource(ABC):
         """
         raise NotImplementedError(
             f"{type(self).__name__}({self.name!r}) does not support key-based "
-            "loading yet.  Implement load_by_keys() to enable mini-batching. "
-            "See docs/design/data-sources.md for the full protocol."
+            "loading yet.  Implement load_by_keys() to enable mini-batching."
         )
 
 

@@ -9,7 +9,7 @@ The term "scaffold" comes from `relann/scaffold.py`, the test-infrastructure mod
 - `test_902_gcn_relnn.py` — 2-layer GCN on Cora. Compares RelaNN vs hand-rolled PyTorch with weight syncing.
 - `test_912_scaffold_gcn_cora.py` — GCN via the `scaffold` infrastructure, deeper parity checks.
 
-(`test_913_scaffold_hgt_first_order.py` — deleted in PR #61 as 3-month-old WIP; was never functional. See `docs/_archive/hgt-status-2026-05-25.md`.)
+(`test_913_scaffold_hgt_first_order.py` — deleted in PR #61 as 3-month-old WIP; was never functional.)
 
 Each test trains a real model — expect ~tens-of-seconds per file rather than seconds.
 

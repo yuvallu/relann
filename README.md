@@ -101,10 +101,9 @@ tests/                 # standalone pytest files
 
 examples/              # user-facing demos (juplit .py)
 research/
-├── paper_experiments/ # reproducibility artefacts for the paper
-└── _drafts/           # in-progress research notebooks
+└── paper_experiments/ # reproducibility artefacts for the paper
 
-docs/                  # design notes, architecture, historical reference
+docs/                  # guides (GPU install, scaffold usage) and project story
 .claude/skills/        # Claude-Code skills (juplit-programming, write-relnn-program)
 scripts/run_tests.py   # convenience wrapper around pytest profiles
 ```

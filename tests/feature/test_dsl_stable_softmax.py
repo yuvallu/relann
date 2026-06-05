@@ -37,7 +37,6 @@ This file pins both halves:
 
 If either pin fails after a future engine change, see also:
     tests/slow/run_compare_dblp_hgt_generic.py (the consumer)
-    docs/design/hgt-2l-recursive-template-row-loss.md (sibling 2L bug)
 """
 from __future__ import annotations
 

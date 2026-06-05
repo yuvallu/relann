@@ -98,7 +98,7 @@ uv run poe nb
 - Branch from `main` (or `juplit` while the migration branch is still active).
 - Don't push your branch unless asked. Commit when asked but don't auto-push (`.claude/skills/planning-and-git-policy.md`).
 - After grammar / parser changes, also update `.claude/skills/relann-dsl-reference.md`, `.claude/skills/relann-repo-overview.md`, and `.claude/skills/write-relnn-program.md`.
-- After test taxonomy or repo-layout changes, also update `docs/design/repo-structure.md`, `docs/design/testing-strategy.md`, `TESTING.md`, and `tests/README.md` (`.claude/skills/design-and-testing-doc-discipline.md` enforces this).
+- After test taxonomy or repo-layout changes, also update `TESTING.md` and `tests/README.md`.
 
 ## When in doubt
 

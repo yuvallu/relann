@@ -1,6 +1,5 @@
 """Regression tests for the multi-step ``Join`` column-tracking bug.
 
-Background — see ``docs/design/join-chain-column-bug.md`` for the full analysis.
 The pre-fix engine called ``pandas.merge`` with default ``_x``/``_y`` suffixes
 at every step of a multi-step Join. After 2 merges the accumulated columns
 ``v_x`` and ``v_y`` were both present, and the 3rd merge tried to apply the
@@ -282,7 +281,7 @@ if __name__ == "__main__":
     try:
         result = join.instantiate(sons)
         print(f"\n  OK — output columns: {list(result.content.columns)}")
-        print("  Fix is in place. See docs/design/join-chain-column-bug.md.\n")
+        print("  Fix is in place.\n")
     except pd.errors.MergeError as e:
         print(f"\n  REGRESSION — pandas.errors.MergeError: {e}")
         print("  The fix in Join._do_one_merge has been removed or reverted.\n")

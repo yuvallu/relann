@@ -61,8 +61,8 @@ outputs, and the mapping from scripts to paper table rows.
 
 ## Consolidated results
 
-See `docs/paper_experiment_results.md` for the master results table used
-when filling in `main.tex`.
+Each experiment's `results/` directory holds the raw JSON and per-run
+summary tables that back the paper's reported numbers.
 
 ## Note
 

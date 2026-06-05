@@ -594,7 +594,6 @@ class Join(nn.Module):
         ]
         # Diagnostic logging for the multi-step Join column-tracking bug. Enable with:
         #   logging.getLogger('relann.era_operations').setLevel(logging.DEBUG)
-        # See docs/design/join-chain-column-bug.md.
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(
                 "_resolve_step_keys step=%d  left_on=%r  right_on=%r  "
@@ -621,8 +620,8 @@ class Join(nn.Module):
         ``df_joined`` (right keys resolve against the fresh ``dfs[step]`` and don't
         need lookahead). When ``left_on != right_on``, the right key column is
         dropped (to honor the user's chosen output naming) — UNLESS the dropped
-        name appears in ``future_keys``. Per ``docs/design/join-chain-column-bug.md``,
-        this is the HGT case where step 1 joins ``left=t, right=s`` (drops ``s``) and
+        name appears in ``future_keys``. This is the HGT case where step 1 joins
+        ``left=t, right=s`` (drops ``s``) and
         step 2 then wants ``left_on=['s']``. Empty default preserves the original
         behaviour for any caller that doesn't supply this lookahead.
         """
@@ -681,7 +680,7 @@ class Join(nn.Module):
 
         Recognized suffixes: ``_x``/``_y``/``_left``/``_right`` (from legacy pandas
         defaults) and ``_iter{N}`` (the step-indexed scheme used by ``_do_one_merge``
-        to avoid chained-merge collisions — see ``docs/design/join-chain-column-bug.md``).
+        to avoid chained-merge collisions).
         Without recognizing ``_iter{N}`` here, those duplicate copies would leak into
         the Join output.
 
@@ -731,7 +730,7 @@ class Join(nn.Module):
         dfs = self._prepare_dfs(sons, self.input_schemas)
         # Pre-resolve every step's (left_on, right_on) so each step can know which
         # column names later steps will still need — see `_do_one_merge`'s
-        # ``future_keys`` parameter and docs/design/join-chain-column-bug.md (HGT case).
+        # ``future_keys`` parameter (the HGT case).
         step_keys = [
             self._resolve_step_keys(ms, sons, ms["step"]) for ms in self.merge_steps
         ]

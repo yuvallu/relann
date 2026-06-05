@@ -113,7 +113,7 @@ print(relann.__version__)    # should print    0.1.0
 
 ### Running a source-module notebook (`relann/engine.ipynb` etc.)
 
-- "Run All" will hit ordering bugs in a few demo cells (engine.py line ~287, ~829; parser.py line ~2223). This is documented in `docs/design/notebook-demos.md` and is **not new** — it predates the migration.
+- "Run All" will hit ordering bugs in a few demo cells (engine.py line ~287, ~829; parser.py line ~2223). This is **not new** — it predates the migration.
 - Run cells selectively: skip the inline demos that reference methods defined far below in the same file.
 - Or open the file in VS Code with the Python + Jupyter extensions — you get cell-by-cell "Run Cell" buttons in the `.py` view directly, no `.ipynb` needed.
 

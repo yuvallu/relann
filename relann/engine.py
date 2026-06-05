@@ -2156,8 +2156,7 @@ def _inject_formal_param(
     The pre-fix engine only looked for the literal name ``"inp"`` (a brittle,
     undocumented convention in the grammar). That broke any DSL body that used
     a different formal name (e.g. ``x``), silently collapsing nested alias
-    calls into just the outermost layer. Full rationale in
-    ``docs/design/transform-def-alias-substitution.md``; the regression suite
+    calls into just the outermost layer. The regression suite
     is in ``tests/repro/test_c2_sparse_matmul_shape_mismatch.py``.
     """
     if body is None:

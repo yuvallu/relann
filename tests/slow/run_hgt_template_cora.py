@@ -23,7 +23,7 @@ full_seed(42)
 # Planetoid -- no need for a pre-existence skip. Removed because the prior
 # `if not path.exists(): sys.exit(0)` made the CI step silently pass when
 # Cora wasn't present, defeating the e2e guard for the V2 optimizer's
-# homogeneous-HGT regression (see docs/design/optimizer-homogeneous-hgt-bug.md).
+# homogeneous-HGT regression.
 from relann.datasets import load_cora_dataset
 
 data = load_cora_dataset()

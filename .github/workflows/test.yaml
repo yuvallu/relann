@@ -56,6 +56,6 @@ jobs:
       # surfaced a regression in `Join._do_one_merge` that the GCN scaffold
       # tests missed. If this step is green on Linux but red on Windows+CPU,
       # the failure is platform-specific; if red here too, it's a real
-      # engine regression. See docs/_archive/hgt-status-2026-05-25.md.
+      # engine regression.
       - name: HGT template Cora e2e (~30s) — exercises multi-step Join path
         run: uv run python tests/slow/run_hgt_template_cora.py

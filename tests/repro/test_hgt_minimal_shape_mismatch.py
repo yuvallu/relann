@@ -1,6 +1,6 @@
 """Regression test for the HGT ``transformation_L1`` shape failure.
 
-Background — see ``docs/design/`` and the sibling
+Background — see the sibling
 ``test_parameter_tensor_div_shape_bug.py``. The "Expected size for first two
 dimensions of batch2 tensor to be: [1, 1] but got: [1, 4]" matmul error that
 originally surfaced from ``tests/scaffold/test_913_scaffold_hgt_first_order``

@@ -66,7 +66,3 @@ Relational model with race context:
   - `driver-top3`: `BCEWithLogitsLoss`
 
 The loader exposes `Drivers`, `Constructors`, `Races`, `Results`, `TrainLabels`. Pass `extra_tables=True` to `load_relbench_f1_dataset` (or `--extra-tables` on the multirun script) to append normalized qualifying + driver-standings features to each result row.
-
-## Gap notes
-
-See `docs/benchmarks/relbench_gap_notes.md` for framework vs glue code.

@@ -94,7 +94,6 @@ Skills live under `.claude/skills/` and are loaded by agents that support skill 
 | `juplit-programming` | The `.py` ↔ `.ipynb` workflow, `if test():` blocks, poe commands |
 | `juplit-migrate-from-nbdev` | Only relevant if you encounter nbdev artefacts in this or another repo |
 | `planning-and-git-policy` | Ask before building; never push; commit only when asked |
-| `design-and-testing-doc-discipline` | Keep `docs/design/*.md`, `TESTING.md`, `tests/README.md` aligned when layout / test taxonomy changes |
 
 A `.claude/skills/README.md` lists them with one-line descriptions.
 
@@ -104,6 +103,4 @@ A `.claude/skills/README.md` lists them with one-line descriptions.
 - Test layout: `tests/README.md`
 - Testing strategy: `TESTING.md`
 - GPU / PyG / RAPIDS install: `docs/install-gpu.md`
-- Inline-demo issue (some `relann/*.py` cells are quarantined): `docs/design/notebook-demos.md`
-- Repo architecture: `docs/design/repo-structure.md`
 - Paper (motivation): *Incorporating Deep Learning Design in Database Queries* (VLDB TaDA 2026) — [arXiv:2605.24207](https://arxiv.org/abs/2605.24207).
